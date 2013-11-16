@@ -172,6 +172,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void searchClientsByName(String name, ResultHandler result) {
 		
@@ -199,6 +200,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void searchClientsByID(Integer id, ResultHandler result) {
 		try{
@@ -225,6 +227,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void registerGroup(JSONObject prm, ResultHandler result) {
 		// TODO Auto-generated method stub
@@ -251,6 +254,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void searchGroups(String groupName, ResultHandler result) {
 		try{
@@ -276,6 +280,7 @@ public class InternetService implements IService {
 		}
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void applyLoan(JSONObject prm, ResultHandler result) {
 		try{

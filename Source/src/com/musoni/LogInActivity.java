@@ -1,8 +1,10 @@
 package com.musoni;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.EditText;
 
 import com.musoni.service.IService;
@@ -24,12 +26,14 @@ public class LogInActivity extends Activity {
 		return true;
 	}
 	
-	public void login(){
+	public void login(View view){
 		EditText fieldUsername = (EditText) findViewById(R.id.UsernameEditText);
 		EditText fieldPassword = (EditText) findViewById(R.id.PasswordEditText);
 		
 		String username = fieldUsername.getText().toString();
 		String password = fieldPassword.getText().toString();
+		
+		final LogInActivity newThis = this;
 				
 		IService service = ServiceFactory.getService();
 		
@@ -39,7 +43,8 @@ public class LogInActivity extends Activity {
 
 			@Override
 			public void success() {
-				// TODO Auto-generated method stub
+				Intent intent = new Intent(newThis, Welcome.class);
+				startActivity(intent);
 				
 			}
 
