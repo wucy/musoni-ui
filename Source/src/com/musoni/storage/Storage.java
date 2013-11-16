@@ -28,7 +28,7 @@ public class Storage extends SQLiteOpenHelper {
 	
 	public Cursor getTaskQueue(String userName) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return db.rawQuery("SELECT * FROM tasks WHERE completed = false", new String[]{});
+		return db.rawQuery("SELECT * FROM tasks WHERE user = ? and (not completed)", new String[]{userName});
 	}
 
 	@Override
@@ -54,7 +54,10 @@ public class Storage extends SQLiteOpenHelper {
 	public void insertTask(ITask task) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put("user", ServiceFactory.getService().getUsername());
+		String userName = ServiceFactory.getService().getUsername();
+		if (userName == null)
+			userName = "code4good";
+		values.put("user", userName);
 		values.put("type", task.getTaskType());
 		values.put("query", task.getStringParams());
 		values.put("completed", task.isCompleted());

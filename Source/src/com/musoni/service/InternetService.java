@@ -1,5 +1,8 @@
 package com.musoni.service;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +17,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Base64;
 
 public class InternetService implements IService {
@@ -23,7 +27,7 @@ public class InternetService implements IService {
 		
 	}
 
-	public static class HandlerWrapper extends AsyncTask<Void,Void,Void> implements Runnable{
+	public class HandlerWrapper extends AsyncTask<Void,Void,Void> implements Runnable{
 		
 		private HttpUriRequest req = null;
 		private ResultHandler result = null;
@@ -44,6 +48,14 @@ public class InternetService implements IService {
 				
 				if(response != null && !response.has("errors"))
 				{
+					
+					if(response.has("authenticated"))
+					{
+						active = true;
+						userId = response.getString("userId");
+						username = response.getString("username");
+					}
+					
 					result.setResult(response);
 					result.setStatus(ResultHandler.SUCCESS);
 					result.success();
@@ -92,13 +104,7 @@ public class InternetService implements IService {
 		params.put("password", password);
 		
 		try {
-			getJSON(baseURL+"authentication", params, "post", null, result);
-			/*userId = ret.getString("userId");
-			username = ret.getString("username");
-			result.setStatus(ResultHandler.SUCCESS);
-			active = true;
-			result.setResult(ret);
-			result.success();*/
+			getJSON(baseURL+"authentication", params, "post", null, result);			
 		}
 		catch(Exception e) {
 		}
@@ -158,7 +164,7 @@ public class InternetService implements IService {
 			parameters.setParameter(key, urlParams.get(key));
 		
 		if (method.toLowerCase().equals("post")) {
-			
+		
 			req = preparePost(apiUrl, urlParams);
 			req.setParams(parameters);
 			
@@ -369,8 +375,12 @@ public class InternetService implements IService {
 			
 			JSONObject prm = new JSONObject();
 			prm.put("locale", "en");
-			prm.put("dateFormat", "dd MMMM yyyy");
-			prm.put("activationDate", "");
+			prm.put("dateFormat", "dd MMMM yyyy");			
+			
+			Date now = (Date) Calendar.getInstance().getTime();
+			String nowAsString = new SimpleDateFormat("dd MMMM yyyy").format(now);
+			
+			prm.put("activationDate", nowAsString);
 			
 			getJSON("loans", params, "POST", prm, result);	
 		}
@@ -382,60 +392,130 @@ public class InternetService implements IService {
 	}
 
 	@Override
-	public void addIDFroClient(Integer clientId, JSONObject prm,
+	public void addIDForClient(Integer clientId, JSONObject prm,
 			ResultHandler result) {
-		// TODO Auto-generated method stub
-		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();			
+			getJSON("clients/"+clientId.toString()+"/identifiers", params, "POST", prm, result);
+		}
+		catch(Exception ex){
+			
+		}		
 	}
 
 	@Override
 	public void getGroup(Integer groupId, ResultHandler result) {
-		// TODO Auto-generated method stub
-		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();			
+			getJSON("groups/"+groupId.toString(), params, "GET", null, result);
+		}
+		catch(Exception ex){
+			
+		}	
 	}
 
 	@Override
 	public void updateGroup(Integer groupId, ResultHandler result) {
-		// TODO Auto-generated method stub
-		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();			
+			getJSON("groups/"+groupId.toString(), params, "PUT", null, result);
+		}
+		catch(Exception ex){
+			
+		}			
 	}
 
 	@Override
 	public void deleteGroup(Integer groupId, ResultHandler result) {
-		// TODO Auto-generated method stub
-		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();			
+			getJSON("groups/"+groupId.toString(), params, "DELETE", null, result);
+		}
+		catch(Exception ex){
+			
+		}			
 	}
 
 	@Override
 	public void associateClients(Integer groupId, JSONObject prm,
 			ResultHandler result) {
-		// TODO Auto-generated method stub
+		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("command", "associateClients");
+			
+			getJSON("groups/"+groupId.toString(), params, "POST", prm, result);
+		}
+		catch(Exception ex){
+			
+		}	
 		
 	}
 
 	@Override
 	public void disassociateClients(Integer groupId, JSONObject prm,
 			ResultHandler result) {
-		// TODO Auto-generated method stub
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("command", "disassociateClients");
+			
+			getJSON("groups/"+groupId.toString(), params, "POST", prm, result);
+		}
+		catch(Exception ex){
+			
+		}	
 		
 	}
 
 	@Override
-	public void getGroupAccounts(Integer groupId, JSONObject prm,
-			ResultHandler result) {
-		// TODO Auto-generated method stub
+	public void getGroupAccounts(Integer groupId, ResultHandler result) {
+		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();
+			
+			getJSON("groups/"+groupId.toString()+"/accounts", params, "GET", null, result);
+		}
+		catch(Exception ex){
+			
+		}	
 		
 	}
 
 	@Override
 	public void activateGroup(Integer groupId, ResultHandler result) {
-		// TODO Auto-generated method stub
+		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("command", "activate");
+			
+			JSONObject prm = new JSONObject();
+			prm.put("locale", "en");
+			prm.put("dateFormat", "dd MMMM yyyy");			
+			
+			Date now = (Date) Calendar.getInstance().getTime();
+			String nowAsString = new SimpleDateFormat("dd MMMM yyyy").format(now);
+			
+			prm.put("activationDate", nowAsString);
+			
+			getJSON("groups/"+groupId.toString(), params, "POST", prm, result);
+		}
+		catch(Exception ex){
+			
+		}	
 		
 	}
 
 	@Override
 	public void getLoan(Integer loanId, ResultHandler result) {
-		// TODO Auto-generated method stub
+		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();
+			
+			getJSON("loans/"+loanId.toString(), params, "GET", null, result);
+		}
+		catch(Exception ex){
+			
+		}	
 		
 	}
 
@@ -443,6 +523,21 @@ public class InternetService implements IService {
 	public String getUsername() {
 		// TODO Auto-generated method stub
 		return username;
+	}
+
+	@Override
+	public void listIDsForClient(Integer clientId, JSONObject prm,
+			ResultHandler result) {
+		
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();
+			
+			getJSON("clients/"+clientId.toString()+"/identifiers", params, "GET", null, result);
+		}
+		catch(Exception ex){
+			
+		}	
+		
 	}
 
 }

@@ -55,8 +55,6 @@ public class MainActivity extends Activity {
 		else{
 			editText.setText("");
 		}
-		
-		
 	}
 	
 	public void inflateActionBar(ActionBar actionBar)
