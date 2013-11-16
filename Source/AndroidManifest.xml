@@ -16,15 +16,20 @@
         <activity
             android:name="com.musoni.MainActivity"
             android:label="@string/app_name" >
+            
+        </activity>
+        <activity
+            android:name="com.musoni.LogInActivity"
+            android:label="@string/title_activity_log_in" >
+        </activity>
+        <activity
+            android:name="com.musoni.ClientRegActivity"
+            android:label="@string/title_activity_client_reg" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.musoni.LogInActivity"
-            android:label="@string/title_activity_log_in" >
         </activity>
     </application>
 
