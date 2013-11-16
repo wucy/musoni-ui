@@ -1,0 +1,44 @@
+<RelativeLayout 
+    	xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:tools="http://schemas.android.com/tools"
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	tools:context=".LogInActivity" >
+    	
+    	<EditText
+    	    android:id="@+id/UsernameEditText"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentLeft="true"
+    	    android:layout_alignParentRight="true"
+    	    android:layout_alignParentTop="true"
+    	    android:layout_marginTop="24dp"
+    	    android:hint="@string/username"
+    	    android:ems="10" />
+
+    	    <requestFocus />
+
+    	    <EditText
+    	        android:id="@+id/PasswordEditText"
+    	        android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
+    	        android:layout_alignParentLeft="true"
+    	        android:layout_alignParentRight="true"
+    	        android:layout_below="@+id/UsernameEditText"
+    	        android:layout_marginTop="28dp"
+    	        android:ems="10"
+    	        android:hint="@string/password"
+    	        android:inputType="textPassword" />
+
+    	    <Button
+    	        android:id="@+id/button1"
+    	        android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
+    	        android:layout_below="@+id/PasswordEditText"
+    	        android:layout_centerHorizontal="true"
+    	        android:layout_marginTop="56dp"
+    	        android:text="@string/button"
+    	        android:onClick="login" />
+
+</RelativeLayout>
+

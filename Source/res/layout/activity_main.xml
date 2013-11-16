@@ -9,16 +9,16 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonPin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
+        android:layout_below="@+id/editTextPin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="49dp"
-        android:text="@string/buttonPin" />
+        android:text="@string/button" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewPin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -28,10 +28,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editTextPin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/textViewPin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
         android:ems="10"

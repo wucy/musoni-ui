@@ -1,10 +1,13 @@
 package com.musoni;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+import android.widget.EditText;
 
 public class MainActivity extends Activity {
+	
+	protected static final String PIN = "0000";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +20,31 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	public void pinEnter()
+	{
+		//Refering string entered into PIN editText view.
+		EditText editText = (EditText) findViewById(R.id.editTextPin);
+		//Extracting the PIN to the String object
+		String enteredPin = editText.getText().toString();
+		//checking if the PIN matches
+		if(enteredPin == PIN){
+			//checking if the user is logged on
+			if(false/*(new ServiceFactory()).isUserLoggedIn()*/){
+			Intent intent = new Intent(this, LogInActivity.class);
+			startActivity(intent);
+			}
+			else{
+				Intent intent = new Intent(this, Welcome.class);
+				startActivity(intent);
+			}
+		}
+		else{
+			editText.setText("@string/empty_string");
+		}
+		
+		
 	}
 
 }
