@@ -27,6 +27,10 @@
             android:label="@string/title_activity_log_in" >
         </activity>
         <uses-library android:name="android.test.runner" />
+        <activity
+            android:name="com.musoni.ClientRegActivity"
+            android:label="@string/title_activity_client_reg" >
+        </activity>
     </application>
 	<instrumentation android:name="android.test.InstrumentationTestRunner"
     android:targetPackage="com.musoni"
