@@ -7,7 +7,10 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
-	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -29,6 +32,10 @@
         <activity
             android:name="com.musoni.ClientRegActivity"
             android:label="@string/title_activity_client_reg" >
+        </activity>
+        <activity
+            android:name="com.musoni.LoanApplication"
+            android:label="@string/title_activity_loan_application" >
         </activity>
     </application>
 
