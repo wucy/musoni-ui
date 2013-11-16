@@ -4,5 +4,8 @@
     <string name="app_name">Musoni</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="textViewPin">PIN</string>
+    <string name="buttonPin">OK</string>
+    
 
 </resources>
