@@ -15,7 +15,8 @@
         android:layout_below="@+id/editTextPin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="49dp"
-        android:text="@string/button" />
+        android:text="@string/button"
+        android:onClick="pinEnter" />
 
     <TextView
         android:id="@+id/textViewPin"
@@ -35,6 +36,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:inputType="numberPassword" />
 
 </RelativeLayout>

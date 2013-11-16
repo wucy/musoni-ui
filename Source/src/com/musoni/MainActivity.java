@@ -1,17 +1,15 @@
 package com.musoni;
 
-import com.musoni.service;
-
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.EditText;
 
 public class MainActivity extends Activity {
 	
-	protected static final String PIN = "0000";
+	protected static final int PIN = 0000;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,26 +24,31 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	public void pinEnter()
+	public void pinEnter(View view)
 	{
 		//Refering string entered into PIN editText view.
 		EditText editText = (EditText) findViewById(R.id.editTextPin);
+		
 		//Extracting the PIN to the String object
-		String enteredPin = editText.getText().toString();
+		int enteredPin = Integer.parseInt(editText.getText().toString());
+		
 		//checking if the PIN matches
 		if(enteredPin == PIN){
+			
 			//checking if the user is logged on
-			if(ServiceFactory.getService().isUserLoggedIn()){
+			/*if(false/*ServiceFactory.getService().isUserLoggedIn()){
+				
 			Intent intent = new Intent(this, LogInActivity.class);
 			startActivity(intent);
+			
 			}
-			else{
+			else{*/
 				Intent intent = new Intent(this, Welcome.class);
 				startActivity(intent);
-			}
+			//}
 		}
 		else{
-			editText.setText("@string/empty_string");
+			editText.setText("");
 		}
 		
 		
