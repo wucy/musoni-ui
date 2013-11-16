@@ -10,5 +10,9 @@
     <string name="empty_string"></string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="title_activity_client_reg">ClientRegActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
 
 </resources>
