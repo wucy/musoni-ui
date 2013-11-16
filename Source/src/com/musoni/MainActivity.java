@@ -1,6 +1,10 @@
 package com.musoni;
 
+import com.musoni.service;
+
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.EditText;
@@ -31,7 +35,7 @@ public class MainActivity extends Activity {
 		//checking if the PIN matches
 		if(enteredPin == PIN){
 			//checking if the user is logged on
-			if(false/*(new ServiceFactory()).isUserLoggedIn()*/){
+			if(ServiceFactory.getService().isUserLoggedIn()){
 			Intent intent = new Intent(this, LogInActivity.class);
 			startActivity(intent);
 			}
