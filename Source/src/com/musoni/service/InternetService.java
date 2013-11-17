@@ -54,7 +54,7 @@ public class InternetService implements IService {
 			try{
 				
 				JSONObject response =null;
-				if(active && loggedIn)
+				if(active)
 				{
 					HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
 					
