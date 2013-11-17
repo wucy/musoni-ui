@@ -11,9 +11,8 @@ public class Welcome extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
-		
-		final ActionBar actionBar = getActionBar();
-		BarInflator.inflateActionBar(actionBar);
+	
+		BarInflator.inflateActionBar(this);
 	}
 
 	@Override
