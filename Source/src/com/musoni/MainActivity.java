@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 		
 		//checking if the PIN matches
 		if(numberOfFailedAttempts<maxAttempts && enteredPin.equals(PIN)){
+			numberOfFailedAttempts = 0;
 			BarInflator.setPinOn(true);
 			//checking if the user is logged on
 			if(!ServiceFactory.getService().isUserLoggedIn()){
