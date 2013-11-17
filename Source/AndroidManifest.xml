@@ -38,6 +38,10 @@
             android:name="com.musoni.LoanApplication"
             android:label="@string/title_activity_loan_application" >
         </activity>
+        <activity
+            android:name="com.musoni.Welcome"
+            android:label="@string/title_activity_welcome" >
+        </activity>
     </application>
 	<instrumentation android:name="android.test.InstrumentationTestRunner"
     android:targetPackage="com.musoni"
