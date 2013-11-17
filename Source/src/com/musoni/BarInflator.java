@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.musoni.service.ServiceFactory;
@@ -28,6 +29,7 @@ public class BarInflator {
 	     actionBar.setDisplayShowHomeEnabled(false);
 	     
 	     final ToggleButton buttonOne = (ToggleButton) activity.findViewById(R.id.togglebutton);
+	     toggleOn = ServiceFactory.getService().isActive();
 	     buttonOne.setChecked(toggleOn);
 	 		buttonOne.setOnClickListener(new Button.OnClickListener() {
 	 	    public void onClick(View v) {
@@ -35,11 +37,13 @@ public class BarInflator {
 	 	            	buttonOne.setChecked(false);
 	 	            	toggleOn = false;
 	 	            	ServiceFactory.getService().forceOffline();
+	 	            	Toast.makeText(activity, "You have gone offline, all changes will be made when you get online!", Toast.LENGTH_LONG).show();
 	 	            }
 	 	            else{
 	 	            	buttonOne.setChecked(true);
 	 	            	toggleOn = true;
 	 	            	ServiceFactory.getService().forceOnline();
+	 	            	Toast.makeText(activity, "You are online now, to submit your offline data, you need to submit something!", Toast.LENGTH_LONG).show();
 	 	            }
 	 	    }
 	 	});
