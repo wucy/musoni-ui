@@ -177,6 +177,8 @@ public class InternetService implements IService {
 	private boolean active = false;
 	
 	private String username = null;
+
+	private String password;
 	
 	public static final String baseURL = "https://mlite-demo.musoni.eu:8443/mifosng-provider/api/v1/";
 	
@@ -184,6 +186,7 @@ public class InternetService implements IService {
 		
 	public void authenticate(String user, String password, ResultHandler result){
 		username = user;
+		this.password = password;
 		authCode = new String(Base64.encode((user + ":" + password).getBytes(), Base64.DEFAULT)).trim();
 		
 		Map<String, String> params = new HashMap<String, String>();
@@ -423,7 +426,17 @@ public class InternetService implements IService {
 
 	@Override
 	public void getOfficerDetails(JSONObject prm, ResultHandler result) {
-		// TODO Auto-generated method stub
+		
+
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", this.username);
+		params.put("password", this.password);
+		
+		try {			
+			getJSON(baseURL+"authentication", params, "post", null, null, result);			
+		}
+		catch(Exception e) {
+		}
 		
 	}
 
