@@ -98,7 +98,7 @@ public class GroupRegSimp extends Activity {
 						
 						Map<String, String> item = new HashMap<String, String>();
 						item.put("name", fullname);
-						items.addFirst(item);
+						items.add(item);
 						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -177,13 +177,14 @@ public class GroupRegSimp extends Activity {
 		  }
 		  
 		  IService service = ServiceFactory.getService();
-		  Toast.makeText(this, "Click", Toast.LENGTH_LONG).show();
+		  //Toast.makeText(this, "Click", Toast.LENGTH_LONG).show();
 		  service.registerGroup(json, new ResultHandler() {
 
 			@Override
 			public void success() {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplication(), "Sucess! The Group is registered now.", Toast.LENGTH_LONG).show();
+				GroupRegSimp.this.finish();
 			}
 
 			@Override

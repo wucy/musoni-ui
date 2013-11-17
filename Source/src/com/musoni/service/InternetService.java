@@ -758,7 +758,10 @@ public class InternetService implements IService {
 	public void getClients(ResultHandler resultHandler) {
 		// TODO Auto-generated method stub
 		try {
-			getJSON("clients", new HashMap<String, String>(), "get", null, null, resultHandler);
+			HashMap<String, String> para = new HashMap<String, String>();
+			para.put("orderBy", "id");
+			para.put("sortOrder", "DESC");
+			getJSON("clients", para, "get", null, null, resultHandler);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
