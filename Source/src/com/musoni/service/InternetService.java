@@ -25,7 +25,9 @@ import com.musoni.tasks.ClientRegisterTask;
 import com.musoni.tasks.GenericTask;
 import com.musoni.tasks.GroupRegisterTask;
 import com.musoni.tasks.ITask;
+import com.musoni.tasks.SearchTask;
 import com.musoni.tasks.TaskQueue;
+import com.musoni.tasks.TaskReflector;
 
 public class InternetService implements IService {
 	
@@ -49,27 +51,28 @@ public class InternetService implements IService {
 		public void run() {
 			
 			try{
-				String retStr = null;
 				
+				JSONObject response =null;
 				if(active)
 				{
 					HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
 					
-					retStr = EntityUtils.toString(res.getEntity());
+					String retStr = EntityUtils.toString(res.getEntity());
+					response = new JSONObject(retStr);
 				}
 				else
 				{
 					if(task!=null)
 					{
-						writeToStorage(task);
+						if(task.getTaskType() == TaskReflector.SEARCH_TASK)
+							response = readFromStorage(task);
+						else
+							writeToStorage(task);
 					}
-					else
-					{
-						readFromStorage(task);
-					}
+					
 				}
 				
-				JSONObject response = new JSONObject(retStr);
+				
 				
 				if(response != null && !response.has("errors"))
 				{
@@ -133,22 +136,33 @@ public class InternetService implements IService {
 		
 		for(ITask task : tasks)
 		{
-			JSONObject json = task.getJsonParams();
-			if(json.has("firstname") && json.has("lastname"))
+			try
 			{
-				try
-				{
-					String fName = json.getString("firstname");
+				boolean shouldReturn = true;
+				JSONObject json = task.getJsonParams();
 				
-					String lName = json.getString("lastname");
-				}
-				catch(Exception ex)
+				while(json.keys().hasNext())
 				{
-				}
+					String key = json.keys().next().toString();
+					if(search.getJsonParams().has(key))
+					{
+						if(json.getString(key).contains(search.getJsonParams().getString(key)))
+							shouldReturn = shouldReturn && true;
+						else
+							shouldReturn = false;
+					}
 				}
 				
-				//if(fName.contains(search.getJsonParams()))
+				if(shouldReturn)
+					return json;
+			
 			}
+			catch(Exception ex)
+			{
+			}
+			
+			}
+						
 		
 		
 		return null;
@@ -289,7 +303,22 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("query", name);
 			params.put("resource", "clients");
-			getJSON("search", params, "GET", null, null, result);
+			
+			JSONObject prm = new JSONObject();
+			
+			SearchTask task = new SearchTask(prm);
+			
+			String[] s = name.split(" ");
+			
+			if(s.length>=2)
+			{			
+				prm.put("firstname", s[0]);
+				prm.put("lastname", s[1]);
+			}
+			else
+				prm.put("fullname", name);
+			
+			getJSON("search", params, "GET", null, task, result);
 		}
 		catch(Exception ex)
 		{
@@ -334,7 +363,13 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("query", groupName);
 			params.put("resource", "groups");
-			getJSON("search", params, "GET", null, null, result);
+			
+			JSONObject prm = new JSONObject();
+			prm.put("name", groupName);
+			
+			SearchTask task = new SearchTask(prm);
+			
+			getJSON("search", params, "GET", null, task, result);
 		}
 		catch(Exception ex)
 		{
@@ -394,7 +429,7 @@ public class InternetService implements IService {
 
 	@Override
 	public boolean isUserLoggedIn() {
-		return active;
+		return this.active;
 	}
 
 	@Override
