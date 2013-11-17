@@ -18,6 +18,7 @@ public class BarInflator {
 	public static void setPinOn(boolean b){pinOn = b;}
 	private static boolean toggleOn = ServiceFactory.getService().isActive();
 	private static boolean loggedOn = ServiceFactory.getService().isUserLoggedIn();
+	public static void logOn(boolean b){loggedOn = b;}
 	public static void inflateActionBar(final Activity activity){
 		final ActionBar actionBar = activity.getActionBar();
 		actionBar.setCustomView(R.layout.actionbar_custom_view_home);
@@ -44,13 +45,15 @@ public class BarInflator {
 	 	});
 	 		
 	 		final ToggleButton buttonTwo = (ToggleButton) activity.findViewById(R.id.buttonLoggedIn);
+	 		loggedOn = ServiceFactory.getService().isUserLoggedIn();   //Update just in case it's different
 		     buttonTwo.setChecked(loggedOn);
 		 		buttonTwo.setOnClickListener(new Button.OnClickListener() {
 				public void onClick(View v) {
+					
+					 buttonTwo.setChecked(loggedOn);
 		 	            if(loggedOn){
 		 	            	AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		 	            	AlertDialog dialog = builder.create();
-		 	            	dialog.setMessage("Are you sure you want to log out? You cannot log back in if you're offline!");
+		 	            
 		 	            	builder.setNegativeButton("No",new DialogInterface.OnClickListener() {
 		 	            		
 								@Override
@@ -63,17 +66,24 @@ public class BarInflator {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									ServiceFactory.getService().logoff();
-									
+									buttonTwo.setChecked(false);
+									 
+									Intent intent = new Intent(activity,LogInActivity.class);
+					 	            activity.startActivity(intent);
 								}
 							});
+		 	           	AlertDialog dialog = builder.create();
+	 	            	dialog.setMessage("Are you sure you want to log out? You cannot log back in if you're offline!");
+		 	            	dialog.show();
 		 	            }
 		 	            else{
 		 	            	if(pinOn){
+		 	            		buttonTwo.setChecked(false);
 		 	            	Intent intent = new Intent(activity,LogInActivity.class);
 		 	            	activity.startActivity(intent);
 		 	            	}
 		 	            	else{
-		 	            		buttonTwo.setChecked(false);
+		 	            		//buttonTwo.setChecked(false);
 		 	            	}
 		 	            }
 		 	    }
