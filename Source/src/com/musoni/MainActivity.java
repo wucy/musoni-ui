@@ -1,6 +1,6 @@
 package com.musoni;
 
-import com.musoni.service.*;
+import com.musoni.service.ServiceFactory;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -19,8 +19,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		final ActionBar actionBar = getActionBar();
-		inflateActionBar(actionBar);
+		BarInflator.inflateActionBar(this);
 		
 	}
 
@@ -43,7 +42,7 @@ public class MainActivity extends Activity {
 		if(enteredPin == PIN){
 			
 			//checking if the user is logged on
-			if(true/*ServiceFactory.getService().isUserLoggedIn()*/){
+			if(ServiceFactory.getService().isUserLoggedIn()){
 				
 			Intent intent = new Intent(this, LogInActivity.class);
 			startActivity(intent);
@@ -57,17 +56,6 @@ public class MainActivity extends Activity {
 		else{
 			editText.setText("");
 		}
-		
-		
 	}
 	
-	public void inflateActionBar(ActionBar actionBar)
-	{
-		 actionBar.setCustomView(R.layout.actionbar_custom_view_home);
-	     actionBar.setDisplayShowTitleEnabled(true);
-	     actionBar.setDisplayShowCustomEnabled(true);
-	     actionBar.setDisplayUseLogoEnabled(false);
-	     actionBar.setDisplayShowHomeEnabled(false);
-	}
-
 }

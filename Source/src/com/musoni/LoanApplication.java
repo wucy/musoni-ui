@@ -1,6 +1,7 @@
 package com.musoni;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.view.Menu;
 
@@ -11,6 +12,7 @@ public class LoanApplication extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_loan_application);
 		
+		BarInflator.inflateActionBar(this);
 	}
 
 	@Override

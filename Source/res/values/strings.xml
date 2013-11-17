@@ -36,5 +36,7 @@
         <item>Married</item>
         <item>Single</item>
     </string-array>
+    <string name="warningMessage">Username and password don\'t match. Try again.</string>
+    <string name="title_activity_welcome">Welcome</string>
 
 </resources>

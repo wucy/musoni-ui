@@ -10,6 +10,7 @@ import com.musoni.service.ResultHandler;
 import com.musoni.service.ServiceFactory;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
@@ -49,6 +50,9 @@ public class ClientRegActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client_reg);
+		
+		
+		BarInflator.inflateActionBar(this);
 		
 		tabHost=(TabHost)findViewById(R.id.tabhost);
 	    tabHost.setup();
@@ -134,7 +138,8 @@ public class ClientRegActivity extends Activity {
 		  radioTypeGroup = (RadioGroup) findViewById(R.id.radioTypeGroup);
 		  // get selected radio button from radioGroup
 		  int clientTypeId = radioTypeGroup.getCheckedRadioButtonId();
-		 
+		  int sexGroupId = ((RadioGroup) findViewById(R.id.radioSex)).getCheckedRadioButtonId();
+		  
 		  // find the radiobutton by returned id
 		  String radioClientType = ((RadioButton) findViewById(clientTypeId)).getText().toString();
 		  String branchName = (String) ((Spinner)findViewById(R.id.branchnamespinner)).getSelectedItem();
@@ -142,18 +147,24 @@ public class ClientRegActivity extends Activity {
 		  String lastName = ((EditText)this.findViewById(R.id.familyname)).getText().toString();
 		  String groupName = ((EditText)this.findViewById(R.id.groupname)).getText().toString();
 		  String loanOfficer = ((EditText)this.findViewById(R.id.loanofficer)).getText().toString();
-		  String gender = ((RadioButton) findViewById(R.id.radioSex)).getText().toString();
+		  String gender = ((RadioButton) findViewById(sexGroupId)).getText().toString();
 		  String marital = (String) ((Spinner)findViewById(R.id.marital_status)).getSelectedItem();
 		  JSONObject json = new JSONObject();
 		  
-		  json.put("firstname", firstName);
-		  json.put("lastname", lastName);
-		  json.put("locale", "en");
-		  json.put("active", true);
-		  json.put("activationDate", "04 March 2009");
-		  json.put("dateFormat", "dd MMMM yyyy");
-		  
+		  try {
+			  json.put("firstname", firstName);
+			  json.put("lastname", lastName);
+			  json.put("locale", "en");
+			  json.put("active", true);
+			  json.put("activationDate", "04 March 2009");
+		  	  json.put("dateFormat", "dd MMMM yyyy");
+		  	  json.put("officerId", 1);
+		  } catch(Exception e) {
+			  e.printStackTrace();
+			  Toast.makeText(getApplicationContext(), "Submit Fail", Toast.LENGTH_LONG).show();
+		  }
 		  IService service = ServiceFactory.getService();
+		  Toast.makeText(this, "Click", Toast.LENGTH_LONG).show();
 		  service.registerClient(json, new ResultHandler() {
 
 			@Override
@@ -165,7 +176,7 @@ public class ClientRegActivity extends Activity {
 			@Override
 			public void fail() {
 				// TODO Auto-generated method stub
-				
+				Toast.makeText(getApplication(), "fail "+ this.getReason(), Toast.LENGTH_LONG).show();
 			}
 
 			@Override
@@ -176,7 +187,7 @@ public class ClientRegActivity extends Activity {
 			  
 		  });
 		  
-		  Toast.makeText(this, branchName, Toast.LENGTH_LONG).show();
+		 // Toast.makeText(this, branchName, Toast.LENGTH_LONG).show();
 	  }
 
 }
