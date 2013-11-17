@@ -16,7 +16,7 @@ public interface IService {
 	
 	void forceOffline();
 	
-
+	void sendOfflineData(ResultHandler result);
 	
 	//HELPER FUNCTIONS
 	

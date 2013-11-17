@@ -465,7 +465,7 @@ public class InternetService implements IService {
 		params.put("password", this.password);
 		
 		try {			
-			getJSON(baseURL+"authentication", params, "post", null, null, result);			
+			getJSON("authentication", params, "post", null, null, result);			
 		}
 		catch(Exception e) {
 		}
@@ -735,6 +735,20 @@ public class InternetService implements IService {
 		catch(Exception ex)
 		{
 			
+		}
+		
+	}
+
+	@Override
+	public void sendOfflineData(ResultHandler result) {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("username", this.username);
+		params.put("password", this.password);
+		
+		try {			
+			getJSON("authentication", params, "post", null, null, result);			
+		}
+		catch(Exception e) {
 		}
 		
 	}
