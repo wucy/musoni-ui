@@ -47,27 +47,25 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/group_branch_name" />
+/>
 
         <Spinner
             android:id="@+id/branch_name_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/group_branch_name_arrays"
-            android:prompt="@string/group_branch_name_prompt" />
+ />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/group_loan_officer" />
+ />
 
         <Spinner
             android:id="@+id/loan_officer_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/group_loan_officer_arrays"
-            android:prompt="@string/group_loan_officer_prompt" />
+ />
 
         <TextView
             android:id="@+id/textView4"

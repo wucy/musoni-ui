@@ -2,7 +2,9 @@ package com.musoni;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
 
 public class Welcome extends Activity {
 
@@ -19,6 +21,11 @@ public class Welcome extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.welcome, menu);
 		return true;
+	}
+	
+	public void clientRegistry(View view) {
+		Intent intent = new Intent(this.getApplicationContext(), ClientRegActivity.class);
+		startActivity(intent);
 	}
 
 }
