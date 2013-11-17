@@ -33,7 +33,7 @@ public class GroupRegSimp extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_group_reg_simp);
+		setContentView(R.layout.activity_group_reg_simp);
 		
 		addItemsOnbranch_name_spinner();
 		
@@ -50,8 +50,8 @@ public class GroupRegSimp extends Activity {
 		
 		
 		SimpleAdapter adapter = new SimpleAdapter(this, items, android.R.layout.simple_list_item_activated_2, new String[] {"name"}, new int[] { android.R.id.text1 });
-		//ListView listView = (ListView) this.findViewById(R.id.listView);
-		//listView.setAdapter(adapter);
+		ListView listView = (ListView) this.findViewById(R.id.listView);
+		listView.setAdapter(adapter);
 		
 	}
 
@@ -65,7 +65,7 @@ public class GroupRegSimp extends Activity {
 	  // add items into spinner dynamically
 	  public void addItemsOnbranch_name_spinner() {
 		 // branch_name_spinner = (Spinner) findViewById(R.id.branch_name_spinner);
-		  branch_name_spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+		  //branch_name_spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 	  }
 	  
 	  int getOfficeID(String x) {
@@ -73,29 +73,33 @@ public class GroupRegSimp extends Activity {
 	  }
 	  
 	  int getStaffID(String x) {
-		  return 1;
+		  return 6;
+	  }
+	  
+	  int getClientID(String x) {
+		  return 124;
 	  }
 	  
 	  public void submitClientRegistry(View view) {
 		  
-		  String name = ((EditText) findViewById(R.id.gname)).toString();
+		  String name = ((EditText) findViewById(R.id.gname)).getText().toString();
 		  String officeid = ((Spinner) findViewById(R.id.branch_name_spinner)).getSelectedItem().toString();
 		  String staffid = ((Spinner) findViewById(R.id.loan_officer_spinner)).getSelectedItem().toString();;
-		  String registration = ((EditText) findViewById(R.id.editText4)).toString();;
+		  String registration = ((EditText) findViewById(R.id.editText4)).getText().toString();;
 		  JSONArray jarr = new JSONArray();
 		  ListView lv = ((ListView) findViewById(R.id.listView));
 		  for (int i = 0; i < lv.getCount(); ++ i) {
-			  jarr.put(lv.getItemAtPosition(i).toString());
+			  jarr.put("" + getClientID(lv.getItemAtPosition(i).toString()));
 		  }
 		  
 		  JSONObject json = new JSONObject();
 		  
 		  try {
 			  json.put("name", name);
-			  json.put("officeid", getOfficeID(officeid));
-			  json.put("staffid", getStaffID(staffid));
-			  json.put("registration", registration);
+			  json.put("officeId", "" + getOfficeID(officeid));
+			  //json.put("staffId", "" + getStaffID(staffid));
 			  json.put("clientMembers", jarr);
+			  json.put("active", false);
 		  } catch(Exception e) {
 			  e.printStackTrace();
 			  Toast.makeText(getApplicationContext(), "Submit Fail", Toast.LENGTH_LONG).show();
@@ -103,7 +107,7 @@ public class GroupRegSimp extends Activity {
 		  
 		  IService service = ServiceFactory.getService();
 		  Toast.makeText(this, "Click", Toast.LENGTH_LONG).show();
-		  service.registerClient(json, new ResultHandler() {
+		  service.registerGroup(json, new ResultHandler() {
 
 			@Override
 			public void success() {

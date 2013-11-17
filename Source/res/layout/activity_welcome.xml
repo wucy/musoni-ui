@@ -37,6 +37,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/buttonLoanApp"
         android:layout_marginTop="42dp"
+        android:onClick="groupRegistry"
         android:text="Group Registeration" />
 
 </RelativeLayout>

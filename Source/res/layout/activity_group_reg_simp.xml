@@ -32,7 +32,7 @@
             android:text="Group Name" />
 
         <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/gname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10" >
@@ -47,25 +47,27 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-/>
+            android:text="Choose Branch" />
 
         <Spinner
             android:id="@+id/branch_name_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
- />
+            android:entries="@array/group_branch_name_arrays"
+            android:prompt="@string/group_branch_name_prompt" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
- />
+            android:text="Loan Officer" />
 
         <Spinner
             android:id="@+id/loan_officer_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
- />
+            android:entries="@array/group_loan_officer_arrays"
+            android:prompt="@string/group_loan_officer_prompt" />
 
         <TextView
             android:id="@+id/textView4"
@@ -88,8 +90,8 @@
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:text="+Add" />
+            android:layout_height="32dp"
+            android:text="Button" />
 
         <ListView
             android:id="@+id/listView"

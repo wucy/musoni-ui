@@ -27,5 +27,10 @@ public class Welcome extends Activity {
 		Intent intent = new Intent(this.getApplicationContext(), ClientRegActivity.class);
 		startActivity(intent);
 	}
+	
+	public void groupRegistry(View view) {
+		Intent intent = new Intent(this.getApplicationContext(), GroupRegSimp.class);
+		startActivity(intent);
+	}
 
 }
