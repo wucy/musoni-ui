@@ -1,5 +1,9 @@
 package com.musoni;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,6 +12,7 @@ import com.musoni.service.ResultHandler;
 import com.musoni.service.ServiceFactory;
 
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
@@ -93,7 +98,8 @@ public class ClientRegActivity extends Activity {
 			////spinner3.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 		  }
 	  
-	  public void submitClientRegistry(View view) {
+	  @SuppressLint("SimpleDateFormat")
+	public void submitClientRegistry(View view) {
 		  radioTypeGroup = (RadioGroup) findViewById(R.id.radioTypeGroup);
 		  // get selected radio button from radioGroup
 		  int clientTypeId = radioTypeGroup.getCheckedRadioButtonId();
@@ -115,7 +121,7 @@ public class ClientRegActivity extends Activity {
 			  json.put("lastname", lastName);
 			  json.put("locale", "en");
 			  json.put("active", true);
-			  json.put("activationDate", "04 March 2009");
+			  json.put("activationDate", new SimpleDateFormat("dd MMMM yyyy").format(Calendar.getInstance().getTime()).toString());
 		  	  json.put("dateFormat", "dd MMMM yyyy");
 		  	  json.put("officeId", 1);
 		  } catch(Exception e) {
