@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
 	protected static final String PIN = "0000";
 	protected static final String MASTER_PIN = "1234567890";
 	protected static final int maxAttempts = 3;
-	int numberOfFailedAttempts = 0;
+	protected static int numberOfFailedAttempts = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -16,7 +16,7 @@ public interface IService {
 	
 	void forceOffline();
 	
-	void setContext(Context con);
+
 	
 	//HELPER FUNCTIONS
 	

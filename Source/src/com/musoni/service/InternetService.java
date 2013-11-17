@@ -1,13 +1,16 @@
 package com.musoni.service;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -41,8 +44,6 @@ public class InternetService implements IService {
 		
 		private HttpUriRequest req = null;
 		private ResultHandler result = null;
-		private ITask task = null;
-		private TaskQueue taskQueue = null;
 		public HandlerWrapper(HttpUriRequest req, ResultHandler result) {
 			this.req = req;
 			this.result = result;
@@ -50,7 +51,11 @@ public class InternetService implements IService {
 		
 		public void run() {
 			
+			executeStack();
+			
 			try{
+				if(wasForcedOffline)
+					throw new Exception("Phone is in offline mode, changes will be made later");
 				
 				JSONObject response =null;
 				HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
@@ -75,6 +80,7 @@ public class InternetService implements IService {
 					result.setStatus(ResultHandler.SUCCESS);
 				}
 				else{
+				
 					result.setStatus(ResultHandler.ERROR);
 					result.setResult(response.getJSONObject("errors"));
 					result.setReason("Error has occured check result for detailed information");
@@ -82,7 +88,7 @@ public class InternetService implements IService {
 				}
 			}
 			catch(Exception ex){
-				taskQueue.enqueue(task);
+				pushToStack(req);
 				active = false;
 				result.setStatus(ResultHandler.ERROR);
 				result.setReason(ex.getMessage().toString());
@@ -105,7 +111,30 @@ public class InternetService implements IService {
 		}
 	}
 	
-	private void writeToStorage(GenericTask task)
+	private void pushToStack(HttpUriRequest req)
+	{
+		offlineStack.add(req);
+	}
+	
+	private void executeStack()
+	{
+		for(HttpUriRequest req : offlineStack)
+		{
+			try {
+				HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		offlineStack = new ArrayList<HttpUriRequest>();
+	}
+	
+	/*private void writeToStorage(GenericTask task)
 	{
 		if(con != null)
 			new Storage(con).insertTask(task);
@@ -156,7 +185,7 @@ public class InternetService implements IService {
 		
 		
 		return null;
-	}
+	}*/
 	
 	private String authCode = null ;
 	
@@ -173,6 +202,8 @@ public class InternetService implements IService {
 	private int officeId = 1;
 
 	private String password;
+	
+	private List<HttpUriRequest> offlineStack = new ArrayList<HttpUriRequest>();
 	
 	public static final String baseURL = "https://mlite-demo.musoni.eu:8443/mifosng-provider/api/v1/";
 	
@@ -673,7 +704,12 @@ public class InternetService implements IService {
 	public void forceOnline() {
 		// TODO Auto-generated method stub
 		if(wasForcedOffline)
+		{
 			active = true;
+			wasForcedOffline = false;
+			
+			//executeStack();
+		}
 	}
 
 	@Override
