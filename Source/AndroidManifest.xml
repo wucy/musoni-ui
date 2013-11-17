@@ -45,6 +45,10 @@
             android:name="com.musoni.Welcome"
             android:label="@string/title_activity_welcome" >
         </activity>
+        <activity
+            android:name="com.musoni.GroupRegSimp"
+            android:label="@string/title_activity_group_reg_simp" >
+        </activity>
     </application>
 	<instrumentation android:name="android.test.InstrumentationTestRunner"
     android:targetPackage="com.musoni"
