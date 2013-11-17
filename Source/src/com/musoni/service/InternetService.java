@@ -42,7 +42,7 @@ public class InternetService implements IService {
 		private HttpUriRequest req = null;
 		private ResultHandler result = null;
 		private ITask task = null;
-		private TaskQueue taskQueue = null;
+		// private TaskQueue taskQueue = null;
 		public HandlerWrapper(HttpUriRequest req, ResultHandler result) {
 			this.req = req;
 			this.result = result;
@@ -82,7 +82,7 @@ public class InternetService implements IService {
 				}
 			}
 			catch(Exception ex){
-				taskQueue.enqueue(task);
+				//taskQueue.enqueue(task);
 				active = false;
 				result.setStatus(ResultHandler.ERROR);
 				result.setReason(ex.getMessage().toString());
@@ -117,10 +117,10 @@ public class InternetService implements IService {
 	{
 		this.con = con;
 	}
-	
+	/*
 	private JSONObject readFromStorage(GenericTask search)
 	{
-		TaskQueue tq = new TaskQueue(username);
+		//TaskQueue tq = new TaskQueue(username);
 		
 		List<ITask> tasks = tq.toList();
 		
@@ -157,7 +157,7 @@ public class InternetService implements IService {
 		
 		return null;
 	}
-	
+	*/
 	private String authCode = null ;
 	
 	private String userId = null;
