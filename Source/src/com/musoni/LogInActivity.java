@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.musoni.service.IService;
 import com.musoni.service.ResultHandler;
@@ -33,9 +35,14 @@ public class LogInActivity extends Activity {
 		String username = fieldUsername.getText().toString();
 		String password = fieldPassword.getText().toString();
 		
+		//System.out.println("wow");
 		final LogInActivity newThis = this;
 				
 		IService service = ServiceFactory.getService();
+		
+		//Intent intent = new Intent(this, Welcome.class);
+		//startActivity(intent);
+		
 		
 		ResultHandler logInResult = new ResultHandler(){
 			
@@ -43,14 +50,16 @@ public class LogInActivity extends Activity {
 
 			@Override
 			public void success() {
-				Intent intent = new Intent(newThis, Welcome.class);
+				Intent intent = new Intent(getApplicationContext(), Welcome.class);
 				startActivity(intent);
 				
 			}
 
 			@Override
 			public void fail() {
-				// TODO Auto-generated method stub
+				//Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
+				TextView warning = new TextView(getApplicationContext());
+				warning.setText("@string/warningMessage");
 				
 			}
 
