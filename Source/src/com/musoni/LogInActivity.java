@@ -50,8 +50,7 @@ public class LogInActivity extends Activity {
 
 			@Override
 			public void fail() {
-				// TODO Auto-generated method stub
-				
+				TextView warning = new TextView(getApplicationContext());
 			}
 
 			@Override
