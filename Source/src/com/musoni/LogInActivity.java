@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.musoni.service.IService;
 import com.musoni.service.ResultHandler;
@@ -51,6 +52,8 @@ public class LogInActivity extends Activity {
 			@Override
 			public void fail() {
 				TextView warning = new TextView(getApplicationContext());
+				warning.setText("@string/warningMessage");
+				
 			}
 
 			@Override
