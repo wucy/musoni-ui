@@ -2,6 +2,8 @@ package com.musoni.service;
 
 import org.json.JSONObject;
 
+import android.content.Context;
+
 public interface IService {
 	
 	public boolean isActive();
@@ -14,7 +16,7 @@ public interface IService {
 	
 	void forceOffline();
 	
-	
+	void setContext(Context con);
 	
 	//HELPER FUNCTIONS
 	

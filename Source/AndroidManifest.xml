@@ -21,7 +21,6 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,6 +29,10 @@
             android:label="@string/title_activity_log_in" >
         </activity>
         <uses-library android:name="android.test.runner" />
+        <activity
+            android:name="com.musoni.BarInflator"
+            android:label="@string/barInflator" >
+        </activity>
         <activity
             android:name="com.musoni.ClientRegActivity"
             android:label="@string/title_activity_client_reg" >

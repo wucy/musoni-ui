@@ -17,6 +17,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
 
@@ -53,7 +54,7 @@ public class InternetService implements IService {
 			try{
 				
 				JSONObject response =null;
-				if(active)
+				if(active && loggedIn)
 				{
 					HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
 					
@@ -79,6 +80,7 @@ public class InternetService implements IService {
 					
 					if(response.has("authenticated"))
 					{
+						loggedIn = true;
 						active = true;
 						userId = response.getString("userId");
 						username = response.getString("username");
@@ -101,6 +103,8 @@ public class InternetService implements IService {
 			catch(Exception ex){
 				if(task != null)
 					writeToStorage(task);
+				
+				active = false;
 				result.setStatus(ResultHandler.ERROR);
 				result.setReason(ex.getMessage().toString());
 				//result.fail();
@@ -125,7 +129,15 @@ public class InternetService implements IService {
 	
 	private void writeToStorage(GenericTask task)
 	{
-		new Storage(null).insertTask(task);
+		if(con != null)
+			new Storage(con).insertTask(task);
+	}
+	
+	private Context con = null;
+	
+	public void setContext(Context con)
+	{
+		this.con = con;
 	}
 	
 	private JSONObject readFromStorage(GenericTask search)
@@ -175,6 +187,8 @@ public class InternetService implements IService {
 	private boolean wasForcedOffline = false;
 	
 	private boolean active = false;
+	
+	private boolean loggedIn = false;
 	
 	private String username = null;
 
@@ -260,7 +274,7 @@ public class InternetService implements IService {
 				
 				if (prm != null) {
 					StringEntity p = new StringEntity(prm.toString());
-					((HttpResponse) req).setEntity(p);
+					((HttpPost)req).setEntity(p);
 				}
 			}
 			else {
@@ -281,7 +295,6 @@ public class InternetService implements IService {
 	}
 	
 
-	@SuppressWarnings("null")
 	
 	public void registerClient(JSONObject prm, ResultHandler result) {
 		// TODO Auto-generated method stub
@@ -442,7 +455,7 @@ public class InternetService implements IService {
 
 	@Override
 	public boolean isUserLoggedIn() {
-		return this.active;
+		return this.loggedIn;
 	}
 
 	@Override
@@ -491,6 +504,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void activateClient(Integer clientId, ResultHandler result) {
 		try{
@@ -605,6 +619,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void activateGroup(Integer groupId, ResultHandler result) {
 		
@@ -680,7 +695,7 @@ public class InternetService implements IService {
 
 	@Override
 	public void logoff() {
-		active = false;
+		loggedIn = false;
 		wasForcedOffline = false;
 	
 		

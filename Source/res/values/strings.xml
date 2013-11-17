@@ -7,6 +7,8 @@
     <string name="textViewPin">PIN</string>
     <string name="button">OK</string>
     <string name="title_activity_log_in">LogInActivity</string>
+    <string name="title_activity_log_in1">LogInActivity</string>
+    <string name="barInflator">Bar Inflator</string>
     <string name="empty_string"></string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -15,7 +17,30 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="title_activity_loan_application">LoanApplication</string>
+    <string name="branch_prompt">Choose A Branch</string>
+    
+    <string name="radio_individual">Individual Client</string>
+    
+    <string-array name="branch_arrays">
+        <item>Head Office</item>
+        <item>Premier League</item>
+        <item>Championship</item>
+    </string-array>
+    
+    <string name="radio_group">Adding to Existing Group</string>
+    
+    <string name="marital_prompt">Choose Marital Status</string>
+    <string name="radio_male">Male</string>
+    <string name="radio_female">Female</string>
+    
+    <string-array name="marital_status_arrays">
+        <item>Divorced</item>
+        <item>Married</item>
+        <item>Single</item>
+    </string-array>
     <string name="warningMessage">Username and password don\'t match. Try again.</string>
     <string name="title_activity_welcome">Welcome</string>
-
+    <string name="wantToLogOut">Are you sure you want to log out? You cannot log back in as long as you\'re away from the internet source!</string>
+	 <string name="fire">Yes</string>
+	  <string name="cancel">No</string>
 </resources>
