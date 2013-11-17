@@ -20,16 +20,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
 
-import com.musoni.storage.Storage;
 import com.musoni.tasks.GenericTask;
 import com.musoni.tasks.GroupRegisterTask;
-import com.musoni.tasks.ITask;
 import com.musoni.tasks.SearchTask;
-import com.musoni.tasks.TaskQueue;
 
 public class InternetService implements IService {
 	
@@ -39,16 +35,19 @@ public class InternetService implements IService {
 	}
 	
 
-	public class HandlerWrapper extends AsyncTask<Void,Void,Void> implements Runnable{
-		
+	public class HandlerWrapper extends AsyncTask<Void,Void,Void> {
+
 		private HttpUriRequest req = null;
+		
 		private ResultHandler result = null;
+		
 		public HandlerWrapper(HttpUriRequest req, ResultHandler result) {
 			this.req = req;
 			this.result = result;
 		}
 		
-		public void run() {
+		@Override
+		protected Void doInBackground(Void... arg0) {
 			
 			executeStack();
 			
@@ -93,11 +92,8 @@ public class InternetService implements IService {
 				result.setReason(ex.getMessage().toString());
 			}
 			
-		}
 
-		@Override
-		protected Void doInBackground(Void... arg0) {
-			run();
+			
 			return null;
 		}
 		
