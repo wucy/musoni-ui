@@ -10,6 +10,10 @@ public interface IService {
 	
 	public String getUsername();
 	
+	void forceOnline();	
+	
+	void forceOffline();
+	
 	//HELPER FUNCTIONS
 	
 	//JSONObject getJSON(String apiUrl, String method, JSONObject prm);
