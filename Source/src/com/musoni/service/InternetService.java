@@ -22,13 +22,11 @@ import android.os.AsyncTask;
 import android.util.Base64;
 
 import com.musoni.storage.Storage;
-import com.musoni.tasks.ClientRegisterTask;
 import com.musoni.tasks.GenericTask;
 import com.musoni.tasks.GroupRegisterTask;
 import com.musoni.tasks.ITask;
 import com.musoni.tasks.SearchTask;
 import com.musoni.tasks.TaskQueue;
-import com.musoni.tasks.TaskReflector;
 
 public class InternetService implements IService {
 	
