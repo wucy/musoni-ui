@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 		String enteredPin = (editText.getText().toString());
 		
 		//checking if the PIN matches
-		if(enteredPin == PIN){
+		if(enteredPin.equals(PIN)){
 			BarInflator.setPinOn(true);
 			//checking if the user is logged on
 			if(!ServiceFactory.getService().isUserLoggedIn()){
