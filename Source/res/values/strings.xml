@@ -26,16 +26,33 @@
     </string-array>
     
     <string name="radio_group">Adding to Existing Group</string>
-    
-    <string name="marital_prompt">Choose Marital Status</string>
     <string name="radio_male">Male</string>
     <string name="radio_female">Female</string>
     
-    <string-array name="marital_status_arrays">
-        <item>Divorced</item>
-        <item>Married</item>
-        <item>Single</item>
+    
+    <string name="loanTerm_prompt">Choose Loan Term</string>
+    <string-array name="loanTerm_arrays">
+        <item>12 Weeks</item>
+        <item>24 Weeks</item>
+        <item>36 Weeks</item>
+        <item>48 Weeks</item>
     </string-array>
+    
+    <string name="repaymentEvery_prompt">Choose Loan Term</string>
+    <string-array name="repaymentEvery_arrays">
+        <item>1 Month</item>
+        <item>3 Month</item>
+        <item>6 Month</item>
+    </string-array>
+    
+     <string name="interestRate_prompt">Choose Loan Term</string>
+     <string-array name="interestRate_arrays">
+        <item>18 Per Year</item>
+        <item>20 Per Year</item>
+        <item>23 Per Year</item>
+     </string-array>
+    
+    
     <string name="warningMessage">Username and password don\'t match. Try again.</string>
     <string name="title_activity_welcome">Welcome</string>
 

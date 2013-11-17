@@ -183,13 +183,7 @@
                         android:layout_height="wrap_content"
                         android:text="Marital Status" />
 
-                    <Spinner
-                        android:id="@+id/marital_status"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:entries="@array/marital_status_arrays"
-                        android:prompt="@string/marital_prompt" />
+
 
                     <Button
                         android:id="@+id/button1"

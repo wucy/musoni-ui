@@ -148,7 +148,7 @@ public class ClientRegActivity extends Activity {
 		  String groupName = ((EditText)this.findViewById(R.id.groupname)).getText().toString();
 		  String loanOfficer = ((EditText)this.findViewById(R.id.loanofficer)).getText().toString();
 		  String gender = ((RadioButton) findViewById(sexGroupId)).getText().toString();
-		  String marital = (String) ((Spinner)findViewById(R.id.marital_status)).getSelectedItem();
+		//  String marital = (String) ((Spinner)findViewById(R.id.marital_status)).getSelectedItem();
 		  JSONObject json = new JSONObject();
 		  
 		  try {
