@@ -19,6 +19,7 @@
     <string name="title_section3">Section 3</string>
     <string name="group_branch_name">Group Branch</string>
 	<string name="sumbitSet">Force sumbit</string>
+	<string name="synchronize">Synch</string>
     
     <string name="group_branch_name_prompt">Choose A Branch</string>
     

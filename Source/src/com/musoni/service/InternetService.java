@@ -37,6 +37,7 @@ public class InternetService implements IService {
 	{
 		
 	}
+	
 
 	public class HandlerWrapper extends AsyncTask<Void,Void,Void> implements Runnable{
 		

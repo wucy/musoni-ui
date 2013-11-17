@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.musoni.service.ResultHandler;
 import com.musoni.service.ServiceFactory;
 
 public class BarInflator {
@@ -92,7 +93,33 @@ public class BarInflator {
 		 	            }
 		 	    }
 		 	});
+	
+	
+	final Button buttonThree = (Button) activity.findViewById(R.id.synchronizeButton);
+	buttonThree.setOnClickListener(new Button.OnClickListener() {
+		public void onClick(View v) {
+			ServiceFactory.getService().sendOfflineData(new ResultHandler(){
+
+				@Override
+				public void success() {
+					Toast.makeText(activity, "You have successfully submited your offline data.", Toast.LENGTH_LONG).show();
+				}
+
+				@Override
+				public void fail() {
+					Toast.makeText(activity, "You are still offline or couldn't submit your data for another reason.", Toast.LENGTH_LONG).show();
+					
+				}
+
+				@Override
+				public void timeout() {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
+		}
+	});
 	}
 }
-
 
