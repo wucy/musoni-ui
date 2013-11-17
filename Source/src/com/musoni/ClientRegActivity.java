@@ -1,6 +1,7 @@
 package com.musoni;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.view.Menu;
 import android.widget.TabHost;
@@ -24,6 +25,9 @@ public class ClientRegActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client_reg);
+		
+		final ActionBar actionBar = getActionBar();
+		BarInflator.inflateActionBar(actionBar);
 		
 		tabHost=(TabHost)findViewById(R.id.tabhost);
 	    tabHost.setup();

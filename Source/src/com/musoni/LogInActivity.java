@@ -1,5 +1,6 @@
 package com.musoni;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import java.lang.*;
@@ -19,6 +20,9 @@ public class LogInActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_log_in);
+		
+		final ActionBar actionBar = getActionBar();
+		BarInflator.inflateActionBar(actionBar);
 	}
 
 	@Override
@@ -53,7 +57,6 @@ public class LogInActivity extends Activity {
 
 			@Override
 			public void fail() {
-				//Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
 				TextView warning = (TextView) findViewById(R.id.warning);
 				View view = newThis.getWindow().getDecorView();
 				view.setBackgroundColor(0xffff0000);
