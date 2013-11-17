@@ -260,7 +260,7 @@ public class InternetService implements IService {
 				
 				if (prm != null) {
 					StringEntity p = new StringEntity(prm.toString());
-					((HttpResponse) req).setEntity(p);
+					((HttpPost)req).setEntity(p);
 				}
 			}
 			else {
