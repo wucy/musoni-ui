@@ -264,7 +264,6 @@ public class InternetService implements IService {
 	}
 	
 
-	@SuppressWarnings("null")
 	
 	public void registerClient(JSONObject prm, ResultHandler result) {
 		// TODO Auto-generated method stub
@@ -443,6 +442,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void activateClient(Integer clientId, ResultHandler result) {
 		try{
@@ -557,6 +557,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void activateGroup(Integer groupId, ResultHandler result) {
 		
