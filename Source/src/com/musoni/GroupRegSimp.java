@@ -2,10 +2,14 @@ package com.musoni;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.musoni.service.IService;
@@ -16,6 +20,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -26,9 +31,14 @@ import android.widget.Toast;
 
 public class GroupRegSimp extends Activity {
 	private Spinner branch_name_spinner;
-
 	
-	protected List<Map<String, String>> items = new ArrayList<Map<String, String>>();
+	
+	List<JSONObject> clients = new ArrayList<JSONObject>();
+	
+	Set<Integer> clientToAdd = new HashSet<Integer>();
+	
+	protected LinkedList<Map<String, String>> items = new LinkedList<Map<String, String>>();
+	Map<String, String> name2id = new HashMap<String, String>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +47,82 @@ public class GroupRegSimp extends Activity {
 		
 		addItemsOnbranch_name_spinner();
 		
-		//////
-		Map<String, String> itemsMap = new HashMap<String, String>();
-		
-		itemsMap.put("name", "Steve Jobs");
-		
-		items.add(itemsMap);
-		
-		itemsMap = new HashMap<String, String>();
-		itemsMap.put("name", "Heming Shou");
-		items.add(itemsMap);
-		
-		
 		SimpleAdapter adapter = new SimpleAdapter(this, items, android.R.layout.simple_list_item_activated_2, new String[] {"name"}, new int[] { android.R.id.text1 });
 		ListView listView = (ListView) this.findViewById(R.id.listView);
 		listView.setAdapter(adapter);
+		/*listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+					long id) {
+				try {
+					clientToAdd.add(clients.get(pos).getInt("id"));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}			
+		});*/
+		//LisViewAdapter adapter = new LisViewAdapter(items, this);
+		
+		
+		IService service = ServiceFactory.getService();
+		service.getClients(new ResultHandler(){
+
+			@Override
+			public void success() {
+				JSONObject ret = this.getResult();
+				int tot;
+				try {
+					tot = ret.getInt("totalFilteredRecords");
+					JSONArray jarr = ret.getJSONArray("pageItems");
+					for (int i = 0; i < tot; ++ i) {
+						clients.add(jarr.getJSONObject(i));
+					}
+
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				
+				for (int i = 0; i < clients.size(); ++ i) {
+					try {
+						String fullname = null;
+						if (clients.get(i).toString().contains("fullname")) fullname = clients.get(i).getString("fullname");
+						else if (clients.get(i).toString().contains("lastname") && clients.get(i).toString().contains("firstname"))
+							fullname = clients.get(i).getString("firstname") + " " + clients.get(i).getString("lastname");
+						else continue;
+						
+						Map<String, String> item = new HashMap<String, String>();
+						item.put("name", fullname);
+						items.addFirst(item);
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				
+			}
+
+			@Override
+			public void fail() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void timeout() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			
+		});
 		
 	}
 
@@ -88,7 +159,7 @@ public class GroupRegSimp extends Activity {
 		  String registration = ((EditText) findViewById(R.id.editText4)).getText().toString();;
 		  JSONArray jarr = new JSONArray();
 		  ListView lv = ((ListView) findViewById(R.id.listView));
-		  for (int i = 0; i < lv.getCount(); ++ i) {
+		  for (Integer i: clientToAdd) {
 			  jarr.put("" + getClientID(lv.getItemAtPosition(i).toString()));
 		  }
 		  
@@ -98,7 +169,7 @@ public class GroupRegSimp extends Activity {
 			  json.put("name", name);
 			  json.put("officeId", "" + getOfficeID(officeid));
 			  //json.put("staffId", "" + getStaffID(staffid));
-			  json.put("clientMembers", jarr);
+			  //json.put("clientMembers", jarr);
 			  json.put("active", false);
 		  } catch(Exception e) {
 			  e.printStackTrace();
