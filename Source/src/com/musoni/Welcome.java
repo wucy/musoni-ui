@@ -32,5 +32,10 @@ public class Welcome extends Activity {
 		Intent intent = new Intent(this.getApplicationContext(), GroupRegSimp.class);
 		startActivity(intent);
 	}
+	
+	public void loanApply(View view) {
+		Intent intent = new Intent(this.getApplicationContext(), LoanApplication.class);
+		startActivity(intent);
+	}
 
 }
