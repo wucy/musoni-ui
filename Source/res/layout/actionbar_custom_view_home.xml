@@ -18,5 +18,13 @@
     	android:textOn="On-line"
     	android:textOff="Off-line"
     	android:padding="10dip" />
+   	
+   	<ToggleButton 
+   	 	android:id="@+id/buttonLoggedIn"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:textOn="Logged-in"
+    	android:textOff="Logged-out"
+    	android:padding="10dip" />
 
 </LinearLayout>

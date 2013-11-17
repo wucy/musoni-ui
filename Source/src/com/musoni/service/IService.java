@@ -2,6 +2,8 @@ package com.musoni.service;
 
 import org.json.JSONObject;
 
+import android.content.Context;
+
 public interface IService {
 	
 	public boolean isActive();
@@ -14,7 +16,7 @@ public interface IService {
 	
 	void forceOffline();
 	
-	
+
 	
 	//HELPER FUNCTIONS
 	
@@ -29,6 +31,8 @@ public interface IService {
 	void getOfficerDetails(JSONObject prm, ResultHandler result);
 	
 	//CLIENTS
+	
+	void getClientGroups(Integer clientId, ResultHandler result);
 
 	void registerClient(JSONObject prm, ResultHandler result);
 	

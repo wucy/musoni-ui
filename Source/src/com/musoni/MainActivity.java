@@ -2,17 +2,20 @@ package com.musoni;
 
 import com.musoni.service.ServiceFactory;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	protected static final int PIN = 0000;
+	protected static final String PIN = "0000";
+	protected static final String MASTER_PIN = "1234567890";
+	protected static final int maxAttempts = 3;
+	protected static int numberOfFailedAttempts = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +39,21 @@ public class MainActivity extends Activity {
 		EditText editText = (EditText) findViewById(R.id.editTextPin);
 		
 		//Extracting the PIN to the String object
-		int enteredPin = Integer.parseInt(editText.getText().toString());
+		String enteredPin = (editText.getText().toString());
+		
+		if(enteredPin.equals(MASTER_PIN))
+		{
+			numberOfFailedAttempts = 0;
+			Toast.makeText(getApplicationContext(), "You have correctly entered the master pin!", Toast.LENGTH_LONG).show();
+			enteredPin = PIN;
+		}
 		
 		//checking if the PIN matches
-		if(enteredPin == PIN){
-			
+		if(numberOfFailedAttempts<maxAttempts && enteredPin.equals(PIN)){
+			numberOfFailedAttempts = 0;
+			BarInflator.setPinOn(true);
 			//checking if the user is logged on
-			if(ServiceFactory.getService().isUserLoggedIn()){
-				
+			if(!ServiceFactory.getService().isUserLoggedIn()){
 			Intent intent = new Intent(this, LogInActivity.class);
 			startActivity(intent);
 			
@@ -54,6 +64,9 @@ public class MainActivity extends Activity {
 			}
 		}
 		else{
+			numberOfFailedAttempts++;
+			if(numberOfFailedAttempts>=maxAttempts)
+				Toast.makeText(getApplicationContext(), "You have entered the wrong pin too many times! You have to enter the master password to unlock!", Toast.LENGTH_LONG).show();
 			editText.setText("");
 		}
 	}

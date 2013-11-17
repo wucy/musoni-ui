@@ -7,23 +7,53 @@
     <string name="textViewPin">PIN</string>
     <string name="button">OK</string>
     <string name="title_activity_log_in">LogInActivity</string>
+    <string name="title_activity_log_in1">LogInActivity</string>
+    <string name="barInflator">Bar Inflator</string>
     <string name="empty_string"></string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="title_activity_client_reg">ClientRegActivity</string>
+    <string name="title_activity_client_reg">Client Registration</string>
+    <string name="title_activity_group_reg_simp">Group Registration</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="title_activity_loan_application">LoanApplication</string>
-    <string name="branch_prompt">Choose A Branch</string>
+    <string name="group_branch_name">Group Branch</string>
+    
+    <string name="group_branch_name_prompt">Choose A Branch</string>
     
     <string name="radio_individual">Individual Client</string>
+    
+    <string-array name="group_branch_name_arrays">
+        <item>Head Office</item>
+        <item>Premier League</item>
+        <item>Championship</item>
+        <item>League 1</item>
+        <item>La Liga</item>
+        <item>Bundesliga</item>
+    </string-array>
+    
+    <string name="branch_prompt">Choose A Branch</string>
     
     <string-array name="branch_arrays">
         <item>Head Office</item>
         <item>Premier League</item>
         <item>Championship</item>
     </string-array>
+    
+    <string name="title_activity_loan_application">LoanApplication</string>
+    <string name="group_loan_officer">Loan Officer</string>
+    
+    <string name="group_loan_officer_prompt">Select an officer</string>
+     <string-array name="group_loan_officer_arrays">
+        <item>A Office</item>
+        <item>B League</item>
+        <item>C</item>
+        <item>D 1</item>
+        <item>E Liga</item>
+        <item>F</item>
+    </string-array>
+    
+    
     
     <string name="radio_group">Adding to Existing Group</string>
     <string name="radio_male">Male</string>
@@ -55,5 +85,9 @@
     
     <string name="warningMessage">Username and password don\'t match. Try again.</string>
     <string name="title_activity_welcome">Welcome</string>
+    <string name="title_activity_queue_task">Queued Task</string>
 
+    <string name="wantToLogOut">Are you sure you want to log out? You cannot log back in as long as you\'re away from the internet source!</string>
+	 <string name="fire">Yes</string>
+	  <string name="cancel">No</string>
 </resources>

@@ -1,13 +1,16 @@
 package com.musoni.service;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -17,17 +20,16 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Base64;
 
 import com.musoni.storage.Storage;
-import com.musoni.tasks.ClientRegisterTask;
 import com.musoni.tasks.GenericTask;
 import com.musoni.tasks.GroupRegisterTask;
 import com.musoni.tasks.ITask;
 import com.musoni.tasks.SearchTask;
 import com.musoni.tasks.TaskQueue;
-import com.musoni.tasks.TaskReflector;
 
 public class InternetService implements IService {
 	
@@ -40,38 +42,24 @@ public class InternetService implements IService {
 		
 		private HttpUriRequest req = null;
 		private ResultHandler result = null;
-		private GenericTask task = null;
-		
-		public HandlerWrapper(HttpUriRequest req, GenericTask task, ResultHandler result) {
+		public HandlerWrapper(HttpUriRequest req, ResultHandler result) {
 			this.req = req;
 			this.result = result;
-			this.task = task;
 		}
 		
 		public void run() {
 			
+			executeStack();
+			
 			try{
+				if(wasForcedOffline)
+					throw new Exception("Phone is in offline mode, changes will be made later");
 				
 				JSONObject response =null;
-				if(active)
-				{
-					HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
+				HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
 					
-					String retStr = EntityUtils.toString(res.getEntity());
-					response = new JSONObject(retStr);
-				}
-				else
-				{
-					if(task!=null)
-					{
-						if(task.getTaskType() == TaskReflector.SEARCH_TASK)
-							response = readFromStorage(task);
-						else
-							writeToStorage(task);
-					}
-					
-				}
-				
+				String retStr = EntityUtils.toString(res.getEntity());
+				response = new JSONObject(retStr);
 				
 				
 				if(response != null && !response.has("errors"))
@@ -79,31 +67,29 @@ public class InternetService implements IService {
 					
 					if(response.has("authenticated"))
 					{
+						loggedIn = true;
 						active = true;
 						userId = response.getString("userId");
 						username = response.getString("username");
+						officeId = response.getInt("officeId");
 					}
 					
 					result.setResult(response);
 					result.setStatus(ResultHandler.SUCCESS);
-					//result.success();
 				}
 				else{
-					if(task!=null)
-						writeToStorage(task);
+				
 					result.setStatus(ResultHandler.ERROR);
 					result.setResult(response.getJSONObject("errors"));
 					result.setReason("Error has occured check result for detailed information");
-					//result.fail();
 					
 				}
 			}
 			catch(Exception ex){
-				if(task != null)
-					writeToStorage(task);
+				pushToStack(req);
+				active = false;
 				result.setStatus(ResultHandler.ERROR);
 				result.setReason(ex.getMessage().toString());
-				//result.fail();
 			}
 			
 		}
@@ -123,9 +109,40 @@ public class InternetService implements IService {
 		}
 	}
 	
-	private void writeToStorage(GenericTask task)
+	private void pushToStack(HttpUriRequest req)
 	{
-		new Storage(null).insertTask(task);
+		offlineStack.add(req);
+	}
+	
+	private void executeStack()
+	{
+		for(HttpUriRequest req : offlineStack)
+		{
+			try {
+				HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		offlineStack = new ArrayList<HttpUriRequest>();
+	}
+	
+	/*private void writeToStorage(GenericTask task)
+	{
+		if(con != null)
+			new Storage(con).insertTask(task);
+	}
+	
+	private Context con = null;
+	
+	public void setContext(Context con)
+	{
+		this.con = con;
 	}
 	
 	private JSONObject readFromStorage(GenericTask search)
@@ -166,7 +183,7 @@ public class InternetService implements IService {
 		
 		
 		return null;
-	}
+	}*/
 	
 	private String authCode = null ;
 	
@@ -176,9 +193,15 @@ public class InternetService implements IService {
 	
 	private boolean active = false;
 	
+	private boolean loggedIn = false;
+	
 	private String username = null;
+	
+	private int officeId = 1;
 
 	private String password;
+	
+	private List<HttpUriRequest> offlineStack = new ArrayList<HttpUriRequest>();
 	
 	public static final String baseURL = "https://mlite-demo.musoni.eu:8443/mifosng-provider/api/v1/";
 	
@@ -194,7 +217,7 @@ public class InternetService implements IService {
 		params.put("password", password);
 		
 		try {			
-			getJSON(baseURL+"authentication", params, "post", null, null, result);			
+			getJSON("authentication", params, "post", null, null, result);			
 		}
 		catch(Exception e) {
 		}
@@ -248,6 +271,7 @@ public class InternetService implements IService {
 	
 	@SuppressLint("DefaultLocale")
 	public void getJSON(String apiUrl, Map<String, String> urlParams, String method, JSONObject prm, GenericTask task, ResultHandler result) throws Exception {
+			apiUrl = baseURL + apiUrl;
 			HttpUriRequest req = null;
 			BasicHttpParams parameters = new BasicHttpParams();
 			for(String key: urlParams.keySet()) 
@@ -268,7 +292,7 @@ public class InternetService implements IService {
 				req.setParams(parameters);		
 			}
 			
-			HandlerWrapper hw = new HandlerWrapper(req,task, result);	
+			HandlerWrapper hw = new HandlerWrapper(req, result);	
 			hw.execute();
 			//Handler hand = new Handler();
 			//hand.post(hw);
@@ -281,14 +305,14 @@ public class InternetService implements IService {
 	}
 	
 
-	@SuppressWarnings("null")
 	
 	public void registerClient(JSONObject prm, ResultHandler result) {
 		// TODO Auto-generated method stub
 		
 		try{
-			ClientRegisterTask task = new ClientRegisterTask(prm);
-			 getJSON("clients", new HashMap<String, String>(), "POST", prm, task, result);
+			//ClientRegisterTask task = new ClientRegisterTask(prm);
+			 prm.put("officeId", this.officeId);
+			 getJSON("clients", new HashMap<String, String>(), "POST", prm, null, result);
 			
 		}
 		catch(Exception ex)
@@ -395,6 +419,14 @@ public class InternetService implements IService {
 	@Override
 	public void applyLoan(JSONObject prm, ResultHandler result) {
 		try{
+			prm.put("locale", "en");
+			prm.put("dateFormat", "dd MMMM yyyy");			
+			
+			Date now = (Date) Calendar.getInstance().getTime();
+			String nowAsString = new SimpleDateFormat("dd MMMM yyyy").format(now);
+			
+			prm.put("submittedOnDate", nowAsString);
+			
 			getJSON("loans", new HashMap<String, String>(), "POST", prm, null, result);
 		}
 		catch(Exception ex)
@@ -442,7 +474,7 @@ public class InternetService implements IService {
 
 	@Override
 	public boolean isUserLoggedIn() {
-		return this.active;
+		return this.loggedIn;
 	}
 
 	@Override
@@ -491,6 +523,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void activateClient(Integer clientId, ResultHandler result) {
 		try{
@@ -605,6 +638,7 @@ public class InternetService implements IService {
 		
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void activateGroup(Integer groupId, ResultHandler result) {
 		
@@ -668,7 +702,12 @@ public class InternetService implements IService {
 	public void forceOnline() {
 		// TODO Auto-generated method stub
 		if(wasForcedOffline)
+		{
 			active = true;
+			wasForcedOffline = false;
+			
+			//executeStack();
+		}
 	}
 
 	@Override
@@ -680,9 +719,23 @@ public class InternetService implements IService {
 
 	@Override
 	public void logoff() {
-		active = false;
+		loggedIn = false;
 		wasForcedOffline = false;
 	
+		
+	}
+
+	@Override
+	public void getClientGroups(Integer clientId, ResultHandler result) {
+		try{
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("associations", "groupMembers");
+			getJSON("clients/"+clientId.toString(), params, "GET", null, null, result);
+		}
+		catch(Exception ex)
+		{
+			
+		}
 		
 	}
 

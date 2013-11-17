@@ -1,9 +1,7 @@
 package com.musoni;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
-import java.lang.*;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -50,6 +48,7 @@ public class LogInActivity extends Activity {
 			@Override
 			public void success() {
 				Intent intent = new Intent(getApplicationContext(), Welcome.class);
+				BarInflator.logOn(true);
 				startActivity(intent);
 				
 			}
