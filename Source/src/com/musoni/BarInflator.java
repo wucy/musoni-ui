@@ -13,8 +13,11 @@ import com.musoni.service.ServiceFactory;
 
 public class BarInflator {
 	
-	private static boolean toggleOn = false;
-	private static boolean loggedOn = false;
+	private static boolean pinOn = false;
+	public static boolean getPinOn(){return pinOn;}
+	public static void setPinOn(boolean b){pinOn = b;}
+	private static boolean toggleOn = ServiceFactory.getService().isActive();
+	private static boolean loggedOn = ServiceFactory.getService().isUserLoggedIn();
 	public static void inflateActionBar(final Activity activity){
 		final ActionBar actionBar = activity.getActionBar();
 		actionBar.setCustomView(R.layout.actionbar_custom_view_home);
@@ -65,8 +68,13 @@ public class BarInflator {
 							});
 		 	            }
 		 	            else{
+		 	            	if(pinOn){
 		 	            	Intent intent = new Intent(activity,LogInActivity.class);
 		 	            	activity.startActivity(intent);
+		 	            	}
+		 	            	else{
+		 	            		buttonTwo.setChecked(false);
+		 	            	}
 		 	            }
 		 	    }
 		 	});

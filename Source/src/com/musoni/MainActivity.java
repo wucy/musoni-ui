@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 		
 		//checking if the PIN matches
 		if(enteredPin == PIN){
-			
+			BarInflator.setPinOn(true);
 			//checking if the user is logged on
 			if(!ServiceFactory.getService().isUserLoggedIn()){
 			Intent intent = new Intent(this, LogInActivity.class);

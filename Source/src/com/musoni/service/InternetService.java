@@ -41,12 +41,11 @@ public class InternetService implements IService {
 		
 		private HttpUriRequest req = null;
 		private ResultHandler result = null;
-		private GenericTask task = null;
-		
-		public HandlerWrapper(HttpUriRequest req, GenericTask task, ResultHandler result) {
+		private ITask task = null;
+		private TaskQueue taskQueue = null;
+		public HandlerWrapper(HttpUriRequest req, ResultHandler result) {
 			this.req = req;
 			this.result = result;
-			this.task = task;
 		}
 		
 		public void run() {
@@ -54,25 +53,10 @@ public class InternetService implements IService {
 			try{
 				
 				JSONObject response =null;
-				if(active)
-				{
-					HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
+				HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
 					
-					String retStr = EntityUtils.toString(res.getEntity());
-					response = new JSONObject(retStr);
-				}
-				else
-				{
-					if(task!=null)
-					{
-						if(task.getTaskType() == TaskReflector.SEARCH_TASK)
-							response = readFromStorage(task);
-						else
-							writeToStorage(task);
-					}
-					
-				}
-				
+				String retStr = EntityUtils.toString(res.getEntity());
+				response = new JSONObject(retStr);
 				
 				
 				if(response != null && !response.has("errors"))
@@ -88,26 +72,19 @@ public class InternetService implements IService {
 					
 					result.setResult(response);
 					result.setStatus(ResultHandler.SUCCESS);
-					//result.success();
 				}
 				else{
-					if(task!=null)
-						writeToStorage(task);
 					result.setStatus(ResultHandler.ERROR);
 					result.setResult(response.getJSONObject("errors"));
 					result.setReason("Error has occured check result for detailed information");
-					//result.fail();
 					
 				}
 			}
 			catch(Exception ex){
-				if(task != null)
-					writeToStorage(task);
-				
+				taskQueue.enqueue(task);
 				active = false;
 				result.setStatus(ResultHandler.ERROR);
 				result.setReason(ex.getMessage().toString());
-				//result.fail();
 			}
 			
 		}
@@ -282,7 +259,7 @@ public class InternetService implements IService {
 				req.setParams(parameters);		
 			}
 			
-			HandlerWrapper hw = new HandlerWrapper(req,task, result);	
+			HandlerWrapper hw = new HandlerWrapper(req, result);	
 			hw.execute();
 			//Handler hand = new Handler();
 			//hand.post(hw);
