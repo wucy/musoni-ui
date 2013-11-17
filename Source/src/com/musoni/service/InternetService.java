@@ -93,7 +93,9 @@ public class InternetService implements IService {
 	private String authCode = null ;
 	
 	private String userId = null;
-		
+	
+	private boolean wasForcedOffline = false;
+	
 	private boolean active = false;
 	
 	private String username = null;
@@ -545,6 +547,19 @@ public class InternetService implements IService {
 			
 		}	
 		
+	}
+
+	@Override
+	public void forceOnline() {
+		// TODO Auto-generated method stub
+		if(wasForcedOffline)
+			active = true;
+	}
+
+	@Override
+	public void forceOffline() {
+		// TODO Auto-generated method stub
+		active = false;
 	}
 
 }
