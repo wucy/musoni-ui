@@ -7,6 +7,8 @@
     <string name="textViewPin">PIN</string>
     <string name="button">OK</string>
     <string name="title_activity_log_in">LogInActivity</string>
+    <string name="title_activity_log_in1">LogInActivity</string>
+    <string name="barInflator">Bar Inflator</string>
     <string name="empty_string"></string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -17,5 +19,7 @@
     <string name="title_activity_loan_application">LoanApplication</string>
     <string name="warningMessage">Username and password don\'t match. Try again.</string>
     <string name="title_activity_welcome">Welcome</string>
-
+    <string name="wantToLogOut">Are you sure you want to log out? You cannot log back in as long as you\'re away from the internet source!</string>
+	 <string name="fire">Yes</string>
+	  <string name="cancel">No</string>
 </resources>
