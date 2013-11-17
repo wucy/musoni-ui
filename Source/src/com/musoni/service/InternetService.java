@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -17,8 +18,14 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Base64;
+
+import com.musoni.storage.Storage;
+import com.musoni.tasks.ClientRegisterTask;
+import com.musoni.tasks.GenericTask;
+import com.musoni.tasks.GroupRegisterTask;
+import com.musoni.tasks.ITask;
+import com.musoni.tasks.TaskQueue;
 
 public class InternetService implements IService {
 	
@@ -31,18 +38,36 @@ public class InternetService implements IService {
 		
 		private HttpUriRequest req = null;
 		private ResultHandler result = null;
+		private GenericTask task = null;
 		
-		public HandlerWrapper(HttpUriRequest req, ResultHandler result) {
+		public HandlerWrapper(HttpUriRequest req, GenericTask task, ResultHandler result) {
 			this.req = req;
 			this.result = result;
+			this.task = task;
 		}
 		
 		public void run() {
 			
 			try{
-				HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
+				String retStr = null;
 				
-				String retStr = EntityUtils.toString(res.getEntity());
+				if(active)
+				{
+					HttpResponse res = MusoniSSLSocketFactory.getNewHttpClient().execute(req);
+					
+					retStr = EntityUtils.toString(res.getEntity());
+				}
+				else
+				{
+					if(task!=null)
+					{
+						writeToStorage(task);
+					}
+					else
+					{
+						readFromStorage(task);
+					}
+				}
 				
 				JSONObject response = new JSONObject(retStr);
 				
@@ -61,13 +86,18 @@ public class InternetService implements IService {
 					//result.success();
 				}
 				else{
+					if(task!=null)
+						writeToStorage(task);
 					result.setStatus(ResultHandler.ERROR);
 					result.setResult(response.getJSONObject("errors"));
 					result.setReason("Error has occured check result for detailed information");
 					//result.fail();
+					
 				}
 			}
 			catch(Exception ex){
+				if(task != null)
+					writeToStorage(task);
 				result.setStatus(ResultHandler.ERROR);
 				result.setReason(ex.getMessage().toString());
 				//result.fail();
@@ -90,6 +120,40 @@ public class InternetService implements IService {
 		}
 	}
 	
+	private void writeToStorage(GenericTask task)
+	{
+		new Storage(null).insertTask(task);
+	}
+	
+	private JSONObject readFromStorage(GenericTask search)
+	{
+		TaskQueue tq = new TaskQueue(username);
+		
+		List<ITask> tasks = tq.toList();
+		
+		for(ITask task : tasks)
+		{
+			JSONObject json = task.getJsonParams();
+			if(json.has("firstname") && json.has("lastname"))
+			{
+				try
+				{
+					String fName = json.getString("firstname");
+				
+					String lName = json.getString("lastname");
+				}
+				catch(Exception ex)
+				{
+				}
+				}
+				
+				//if(fName.contains(search.getJsonParams()))
+			}
+		
+		
+		return null;
+	}
+	
 	private String authCode = null ;
 	
 	private String userId = null;
@@ -105,15 +169,15 @@ public class InternetService implements IService {
 	public static final String tenantIdentifier = "code4good";
 		
 	public void authenticate(String user, String password, ResultHandler result){
-		
+		username = user;
 		authCode = new String(Base64.encode((user + ":" + password).getBytes(), Base64.DEFAULT)).trim();
 		
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("username", user);
 		params.put("password", password);
 		
-		try {
-			getJSON(baseURL+"authentication", params, "post", null, result);			
+		try {			
+			getJSON(baseURL+"authentication", params, "post", null, null, result);			
 		}
 		catch(Exception e) {
 		}
@@ -166,31 +230,32 @@ public class InternetService implements IService {
 	}
 	
 	@SuppressLint("DefaultLocale")
-	public void getJSON(String apiUrl, Map<String, String> urlParams, String method, JSONObject prm, ResultHandler result) throws Exception {
-		HttpUriRequest req = null;
-		BasicHttpParams parameters = new BasicHttpParams();
-		for(String key: urlParams.keySet()) 
-			parameters.setParameter(key, urlParams.get(key));
-		
-		if (method.toLowerCase().equals("post")) {
-		
-			req = preparePost(apiUrl, urlParams);
-			req.setParams(parameters);
+	public void getJSON(String apiUrl, Map<String, String> urlParams, String method, JSONObject prm, GenericTask task, ResultHandler result) throws Exception {
+			HttpUriRequest req = null;
+			BasicHttpParams parameters = new BasicHttpParams();
+			for(String key: urlParams.keySet()) 
+				parameters.setParameter(key, urlParams.get(key));
 			
-			if (prm != null) {
-				StringEntity p = new StringEntity(prm.toString());
-				((HttpResponse) req).setEntity(p);
+			if (method.toLowerCase().equals("post")) {
+			
+				req = preparePost(apiUrl, urlParams);
+				req.setParams(parameters);
+				
+				if (prm != null) {
+					StringEntity p = new StringEntity(prm.toString());
+					((HttpResponse) req).setEntity(p);
+				}
 			}
-		}
-		else {
-			req = prepareGet(apiUrl, urlParams);
-			req.setParams(parameters);		
-		}
+			else {
+				req = prepareGet(apiUrl, urlParams);
+				req.setParams(parameters);		
+			}
+			
+			HandlerWrapper hw = new HandlerWrapper(req,task, result);	
+			hw.execute();
+			//Handler hand = new Handler();
+			//hand.post(hw);
 		
-		HandlerWrapper hw = new HandlerWrapper(req, result);	
-		hw.execute();
-		//Handler hand = new Handler();
-		//hand.post(hw);
 	}
 	
 	
@@ -200,12 +265,13 @@ public class InternetService implements IService {
 	
 
 	@SuppressWarnings("null")
-	@Override
+	
 	public void registerClient(JSONObject prm, ResultHandler result) {
 		// TODO Auto-generated method stub
 		
 		try{
-			 getJSON("clients", new HashMap<String, String>(), "POST", prm, result);
+			ClientRegisterTask task = new ClientRegisterTask(prm);
+			 getJSON("clients", new HashMap<String, String>(), "POST", prm, task, result);
 			
 		}
 		catch(Exception ex)
@@ -223,7 +289,7 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("query", name);
 			params.put("resource", "clients");
-			getJSON("search", params, "GET", null, result);
+			getJSON("search", params, "GET", null, null, result);
 		}
 		catch(Exception ex)
 		{
@@ -238,7 +304,7 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("query", id.toString());
 			params.put("resource", "clients");
-			getJSON("search", params, "GET", null, result);
+			getJSON("search", params, "GET", null, null, result);
 		}
 		catch(Exception ex)
 		{
@@ -252,7 +318,8 @@ public class InternetService implements IService {
 		// TODO Auto-generated method stub
 		
 		try{
-			getJSON("groups", new HashMap<String, String>(), "POST", prm, result);
+			GroupRegisterTask task = new GroupRegisterTask(prm);
+			getJSON("groups", new HashMap<String, String>(), "POST", prm, task, result);
 		}
 		catch(Exception ex)
 		{
@@ -267,7 +334,7 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("query", groupName);
 			params.put("resource", "groups");
-			getJSON("search", params, "GET", null, result);
+			getJSON("search", params, "GET", null, null, result);
 		}
 		catch(Exception ex)
 		{
@@ -280,7 +347,7 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("query", id.toString());
 			params.put("resource", "groups");
-			getJSON("search", params, "GET", null, result);			
+			getJSON("search", params, "GET", null, null, result);			
 		}
 		catch(Exception ex)
 		{
@@ -290,7 +357,7 @@ public class InternetService implements IService {
 	@Override
 	public void applyLoan(JSONObject prm, ResultHandler result) {
 		try{
-			getJSON("loans", new HashMap<String, String>(), "POST", prm, result);
+			getJSON("loans", new HashMap<String, String>(), "POST", prm, null, result);
 		}
 		catch(Exception ex)
 		{
@@ -304,7 +371,7 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("command", "calculateLoanSchedule");
 			
-			getJSON("loans", params, "POST", prm, result);
+			getJSON("loans", params, "POST", prm, null, result);
 							
 		}
 		catch(Exception ex)
@@ -337,7 +404,7 @@ public class InternetService implements IService {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();
 						
-			getJSON("clients/"+clientId.toString(), params, "PUT", prm, result);
+			getJSON("clients/"+clientId.toString(), params, "PUT", prm, null, result);
 							
 		}
 		catch(Exception ex)
@@ -352,7 +419,7 @@ public class InternetService implements IService {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();
 			
-			getJSON("clients/"+clientId.toString(), params, "DELETE", null, result);	
+			getJSON("clients/"+clientId.toString(), params, "DELETE", null, null, result);	
 		}
 		catch(Exception ex)
 		{
@@ -368,7 +435,7 @@ public class InternetService implements IService {
 			
 			JSONObject prm = new JSONObject().put("staffId", userId);
 			
-			getJSON("clients/"+clientId.toString(), params, "POST", prm, result);	
+			getJSON("clients/"+clientId.toString(), params, "POST", prm, null, result);	
 		}
 		catch(Exception ex)
 		{
@@ -391,7 +458,7 @@ public class InternetService implements IService {
 			
 			prm.put("activationDate", nowAsString);
 			
-			getJSON("loans", params, "POST", prm, result);	
+			getJSON("loans", params, "POST", prm, null, result);	
 		}
 		catch(Exception ex)
 		{
@@ -405,7 +472,7 @@ public class InternetService implements IService {
 			ResultHandler result) {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();			
-			getJSON("clients/"+clientId.toString()+"/identifiers", params, "POST", prm, result);
+			getJSON("clients/"+clientId.toString()+"/identifiers", params, "POST", prm, null, result);
 		}
 		catch(Exception ex){
 			
@@ -416,7 +483,7 @@ public class InternetService implements IService {
 	public void getGroup(Integer groupId, ResultHandler result) {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();			
-			getJSON("groups/"+groupId.toString(), params, "GET", null, result);
+			getJSON("groups/"+groupId.toString(), params, "GET", null, null, result);
 		}
 		catch(Exception ex){
 			
@@ -427,7 +494,7 @@ public class InternetService implements IService {
 	public void updateGroup(Integer groupId, ResultHandler result) {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();			
-			getJSON("groups/"+groupId.toString(), params, "PUT", null, result);
+			getJSON("groups/"+groupId.toString(), params, "PUT", null, null, result);
 		}
 		catch(Exception ex){
 			
@@ -438,7 +505,7 @@ public class InternetService implements IService {
 	public void deleteGroup(Integer groupId, ResultHandler result) {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();			
-			getJSON("groups/"+groupId.toString(), params, "DELETE", null, result);
+			getJSON("groups/"+groupId.toString(), params, "DELETE", null, null, result);
 		}
 		catch(Exception ex){
 			
@@ -453,7 +520,7 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("command", "associateClients");
 			
-			getJSON("groups/"+groupId.toString(), params, "POST", prm, result);
+			getJSON("groups/"+groupId.toString(), params, "POST", prm, null, result);
 		}
 		catch(Exception ex){
 			
@@ -468,7 +535,7 @@ public class InternetService implements IService {
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("command", "disassociateClients");
 			
-			getJSON("groups/"+groupId.toString(), params, "POST", prm, result);
+			getJSON("groups/"+groupId.toString(), params, "POST", prm, null, result);
 		}
 		catch(Exception ex){
 			
@@ -482,7 +549,7 @@ public class InternetService implements IService {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();
 			
-			getJSON("groups/"+groupId.toString()+"/accounts", params, "GET", null, result);
+			getJSON("groups/"+groupId.toString()+"/accounts", params, "GET", null, null, result);
 		}
 		catch(Exception ex){
 			
@@ -506,7 +573,7 @@ public class InternetService implements IService {
 			
 			prm.put("activationDate", nowAsString);
 			
-			getJSON("groups/"+groupId.toString(), params, "POST", prm, result);
+			getJSON("groups/"+groupId.toString(), params, "POST", prm,null, result);
 		}
 		catch(Exception ex){
 			
@@ -520,7 +587,7 @@ public class InternetService implements IService {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();
 			
-			getJSON("loans/"+loanId.toString(), params, "GET", null, result);
+			getJSON("loans/"+loanId.toString(), params, "GET", null,null, result);
 		}
 		catch(Exception ex){
 			
@@ -541,7 +608,7 @@ public class InternetService implements IService {
 		try{
 			HashMap<String, String> params = new HashMap<String, String>();
 			
-			getJSON("clients/"+clientId.toString()+"/identifiers", params, "GET", null, result);
+			getJSON("clients/"+clientId.toString()+"/identifiers", params, "GET", null, null, result);
 		}
 		catch(Exception ex){
 			
@@ -559,7 +626,16 @@ public class InternetService implements IService {
 	@Override
 	public void forceOffline() {
 		// TODO Auto-generated method stub
+		wasForcedOffline= true;
 		active = false;
+	}
+
+	@Override
+	public void logoff() {
+		active = false;
+		wasForcedOffline = false;
+	
+		
 	}
 
 }

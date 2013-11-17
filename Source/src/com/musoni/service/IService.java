@@ -14,11 +14,15 @@ public interface IService {
 	
 	void forceOffline();
 	
+	
+	
 	//HELPER FUNCTIONS
 	
 	//JSONObject getJSON(String apiUrl, String method, JSONObject prm);
 	
 	void authenticate(String user, String password, ResultHandler result);
+	
+	void logoff();
 	
 	//OFFICER
 	
