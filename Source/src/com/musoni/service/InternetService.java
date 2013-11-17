@@ -58,28 +58,35 @@ public class InternetService implements IService {
 					
 					result.setResult(response);
 					result.setStatus(ResultHandler.SUCCESS);
-					result.success();
+					//result.success();
 				}
 				else{
 					result.setStatus(ResultHandler.ERROR);
 					result.setResult(response.getJSONObject("errors"));
 					result.setReason("Error has occured check result for detailed information");
-					result.fail();
+					//result.fail();
 				}
 			}
 			catch(Exception ex){
 				result.setStatus(ResultHandler.ERROR);
 				result.setReason(ex.getMessage().toString());
-				result.fail();
+				//result.fail();
 			}
 			
 		}
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-						
 			run();
 			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void arg) {
+			if (result.getStatus() == ResultHandler.SUCCESS)
+				result.success();
+			else
+				result.fail();
 		}
 	}
 	
