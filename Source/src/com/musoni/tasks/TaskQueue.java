@@ -29,7 +29,7 @@ public class TaskQueue {
 		return ret;
 	}
 
-	private TaskQueue(String userName) {
+	public TaskQueue(String userName) {
 		this.userName = userName;
 		this.queue = new LinkedList<ITask>();
 	}
