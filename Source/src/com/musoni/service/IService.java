@@ -85,5 +85,7 @@ public interface IService {
 	//BUSINESS VISITS
 	
 	void businessVist(JSONObject prm, ResultHandler result);
+
+	public void getClients(ResultHandler resultHandler);
 	
 }

@@ -753,4 +753,16 @@ public class InternetService implements IService {
 		
 	}
 
+	@Override
+	public void getClients(ResultHandler resultHandler) {
+		// TODO Auto-generated method stub
+		try {
+			getJSON("clients", new HashMap<String, String>(), "get", null, null, resultHandler);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }
