@@ -48,6 +48,7 @@ public class LogInActivity extends Activity {
 			@Override
 			public void success() {
 				Intent intent = new Intent(getApplicationContext(), Welcome.class);
+				BarInflator.logOn(true);
 				startActivity(intent);
 				
 			}

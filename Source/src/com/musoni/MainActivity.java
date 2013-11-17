@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity {
 	
-	protected static String PIN = "0000";
+	protected static final String PIN = "0000";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
 		String enteredPin = (editText.getText().toString());
 		
 		//checking if the PIN matches
-		if(enteredPin.equals(PIN)){
+		if(enteredPin.equals( PIN)){
 			BarInflator.setPinOn(true);
 			//checking if the user is logged on
 			if(!ServiceFactory.getService().isUserLoggedIn()){
