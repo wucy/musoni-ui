@@ -15,5 +15,26 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="title_activity_loan_application">LoanApplication</string>
+    <string name="branch_prompt">Choose A Branch</string>
+    
+    <string name="radio_individual">Individual Client</string>
+    
+    <string-array name="branch_arrays">
+        <item>Head Office</item>
+        <item>Premier League</item>
+        <item>Championship</item>
+    </string-array>
+    
+    <string name="radio_group">Adding to Existing Group</string>
+    
+    <string name="marital_prompt">Choose Marital Status</string>
+    <string name="radio_male">Male</string>
+    <string name="radio_female">Female</string>
+    
+    <string-array name="marital_status_arrays">
+        <item>Divorced</item>
+        <item>Married</item>
+        <item>Single</item>
+    </string-array>
 
 </resources>

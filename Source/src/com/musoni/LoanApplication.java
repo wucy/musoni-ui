@@ -10,6 +10,7 @@ public class LoanApplication extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_loan_application);
+		
 	}
 
 	@Override
