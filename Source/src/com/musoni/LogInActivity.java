@@ -2,12 +2,12 @@ package com.musoni;
 
 import android.app.Activity;
 import android.content.Intent;
+import java.lang.*;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.musoni.service.IService;
 import com.musoni.service.ResultHandler;
@@ -38,11 +38,7 @@ public class LogInActivity extends Activity {
 		//System.out.println("wow");
 		final LogInActivity newThis = this;
 				
-		IService service = ServiceFactory.getService();
-		
-		//Intent intent = new Intent(this, Welcome.class);
-		//startActivity(intent);
-		
+		IService service = ServiceFactory.getService();		
 		
 		ResultHandler logInResult = new ResultHandler(){
 			
@@ -58,8 +54,10 @@ public class LogInActivity extends Activity {
 			@Override
 			public void fail() {
 				//Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
-				TextView warning = new TextView(getApplicationContext());
-				warning.setText("@string/warningMessage");
+				TextView warning = (TextView) findViewById(R.id.warning);
+				View view = newThis.getWindow().getDecorView();
+				view.setBackgroundColor(0xffff0000);
+				warning.setText("Couldn't match username and password.");
 				
 			}
 
