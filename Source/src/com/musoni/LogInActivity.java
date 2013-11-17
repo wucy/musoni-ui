@@ -21,8 +21,7 @@ public class LogInActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_log_in);
 		
-		final ActionBar actionBar = getActionBar();
-		BarInflator.inflateActionBar(actionBar);
+		BarInflator.inflateActionBar(this);
 	}
 
 	@Override

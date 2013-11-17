@@ -26,8 +26,8 @@ public class ClientRegActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client_reg);
 		
-		final ActionBar actionBar = getActionBar();
-		BarInflator.inflateActionBar(actionBar);
+		
+		BarInflator.inflateActionBar(this);
 		
 		tabHost=(TabHost)findViewById(R.id.tabhost);
 	    tabHost.setup();

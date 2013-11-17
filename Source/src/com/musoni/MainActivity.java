@@ -19,8 +19,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		final ActionBar actionBar = getActionBar();
-		BarInflator.inflateActionBar(actionBar);
+		BarInflator.inflateActionBar(this);
 		
 	}
 

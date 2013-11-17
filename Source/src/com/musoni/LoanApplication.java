@@ -12,8 +12,7 @@ public class LoanApplication extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_loan_application);
 		
-		final ActionBar actionBar = getActionBar();
-		BarInflator.inflateActionBar(actionBar);
+		BarInflator.inflateActionBar(this);
 	}
 
 	@Override
