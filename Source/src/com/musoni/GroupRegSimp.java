@@ -21,7 +21,7 @@ public class GroupRegSimp extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_group_reg_simp);
+		//setContentView(R.layout.activity_group_reg_simp);
 		
 		addItemsOnbranch_name_spinner();
 		
@@ -38,21 +38,21 @@ public class GroupRegSimp extends Activity {
 		
 		
 		SimpleAdapter adapter = new SimpleAdapter(this, items, android.R.layout.simple_list_item_activated_2, new String[] {"name"}, new int[] { android.R.id.text1 });
-		ListView listView = (ListView) this.findViewById(R.id.listView);
-		listView.setAdapter(adapter);
+		//ListView listView = (ListView) this.findViewById(R.id.listView);
+		//listView.setAdapter(adapter);
 		
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.group_reg_simp, menu);
+		//getMenuInflater().inflate(R.menu.group_reg_simp, menu);
 		return true;
 	}
 	
 	  // add items into spinner dynamically
 	  public void addItemsOnbranch_name_spinner() {
-		  branch_name_spinner = (Spinner) findViewById(R.id.branch_name_spinner);
+		 // branch_name_spinner = (Spinner) findViewById(R.id.branch_name_spinner);
 		  branch_name_spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 	  }
 

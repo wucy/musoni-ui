@@ -51,6 +51,11 @@
             android:name="com.musoni.QueueTaskActivity"
             android:label="@string/title_activity_queue_task" >
         </activity>
+        
+        <activity
+            android:name="com.musoni.GroupRegSimp"
+            android:label="@string/title_activity_group_reg_simp" >
+        </activity>
     </application>
 
     <instrumentation

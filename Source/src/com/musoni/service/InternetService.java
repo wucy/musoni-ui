@@ -68,6 +68,7 @@ public class InternetService implements IService {
 						active = true;
 						userId = response.getString("userId");
 						username = response.getString("username");
+						officeId = response.getInt("officeId");
 					}
 					
 					result.setResult(response);
@@ -168,6 +169,8 @@ public class InternetService implements IService {
 	private boolean loggedIn = false;
 	
 	private String username = null;
+	
+	private int officeId = 1;
 
 	private String password;
 	
@@ -185,7 +188,7 @@ public class InternetService implements IService {
 		params.put("password", password);
 		
 		try {			
-			getJSON(baseURL+"authentication", params, "post", null, null, result);			
+			getJSON("authentication", params, "post", null, null, result);			
 		}
 		catch(Exception e) {
 		}
@@ -239,6 +242,7 @@ public class InternetService implements IService {
 	
 	@SuppressLint("DefaultLocale")
 	public void getJSON(String apiUrl, Map<String, String> urlParams, String method, JSONObject prm, GenericTask task, ResultHandler result) throws Exception {
+			apiUrl = baseURL + apiUrl;
 			HttpUriRequest req = null;
 			BasicHttpParams parameters = new BasicHttpParams();
 			for(String key: urlParams.keySet()) 
@@ -277,8 +281,9 @@ public class InternetService implements IService {
 		// TODO Auto-generated method stub
 		
 		try{
-			ClientRegisterTask task = new ClientRegisterTask(prm);
-			 getJSON("clients", new HashMap<String, String>(), "POST", prm, task, result);
+			//ClientRegisterTask task = new ClientRegisterTask(prm);
+			 prm.put("officeId", this.officeId);
+			 getJSON("clients", new HashMap<String, String>(), "POST", prm, null, result);
 			
 		}
 		catch(Exception ex)
