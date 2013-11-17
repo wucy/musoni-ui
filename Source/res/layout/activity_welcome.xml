@@ -9,27 +9,33 @@
     tools:context=".Welcome" >
 
     <Button
-        android:id="@+id/buttonGroupReg"
+        android:id="@+id/buttonClientReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Group Registeration" />
+        android:layout_alignLeft="@+id/buttonLoanApp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="62dp"
+        android:text="Client Registeration" />
 
     <Button
         android:id="@+id/buttonLoanApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonGroupReg"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/buttonGroupReg"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buttonClientReg"
+        android:layout_marginTop="38dp"
         android:text="Loan Application" />
 
     <Button
-        android:id="@+id/buttonClientReg"
+        android:id="@+id/buttonGroupReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonLoanApp"
         android:layout_alignParentLeft="true"
-        android:text="Client Registeration" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buttonLoanApp"
+        android:layout_marginTop="42dp"
+        android:text="Group Registeration" />
 
 </RelativeLayout>
