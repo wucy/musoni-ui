@@ -29,6 +29,10 @@
             android:label="@string/title_activity_log_in" >
         </activity>
         <activity
+            android:name="com.musoni.BarInflator"
+            android:label="@string/barInflator" >
+        </activity>
+        <activity
             android:name="com.musoni.ClientRegActivity"
             android:label="@string/title_activity_client_reg" >
         </activity>

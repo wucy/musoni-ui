@@ -10,7 +10,6 @@ import com.musoni.service.ResultHandler;
 import com.musoni.service.ServiceFactory;
 
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
