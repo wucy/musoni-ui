@@ -390,6 +390,14 @@ public class InternetService implements IService {
 	@Override
 	public void applyLoan(JSONObject prm, ResultHandler result) {
 		try{
+			prm.put("locale", "en");
+			prm.put("dateFormat", "dd MMMM yyyy");			
+			
+			Date now = (Date) Calendar.getInstance().getTime();
+			String nowAsString = new SimpleDateFormat("dd MMMM yyyy").format(now);
+			
+			prm.put("submittedOnDate", nowAsString);
+			
 			getJSON("loans", new HashMap<String, String>(), "POST", prm, null, result);
 		}
 		catch(Exception ex)
