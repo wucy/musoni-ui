@@ -31,6 +31,8 @@ public interface IService {
 	void getOfficerDetails(JSONObject prm, ResultHandler result);
 	
 	//CLIENTS
+	
+	void getClientGroups(Integer clientId, ResultHandler result);
 
 	void registerClient(JSONObject prm, ResultHandler result);
 	
