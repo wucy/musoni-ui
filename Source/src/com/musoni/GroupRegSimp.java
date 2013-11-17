@@ -183,13 +183,13 @@ public class GroupRegSimp extends Activity {
 			@Override
 			public void success() {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplication(), "sucess", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplication(), "Sucess! The Group is registered now.", Toast.LENGTH_LONG).show();
 			}
 
 			@Override
 			public void fail() {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplication(), "fail "+ this.getReason(), Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplication(), "Failed! The Group Name Conflicts.", Toast.LENGTH_LONG).show();
 			}
 
 			@Override

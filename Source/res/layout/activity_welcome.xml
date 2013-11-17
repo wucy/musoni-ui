@@ -27,7 +27,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/buttonClientReg"
         android:layout_marginTop="38dp"
-        android:onClick="loa你Apply"
+        android:onClick="loanApply"
         android:text="Loan Application" />
 
     <Button
