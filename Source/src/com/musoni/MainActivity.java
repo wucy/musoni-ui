@@ -2,7 +2,6 @@ package com.musoni;
 
 import com.musoni.service.ServiceFactory;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,8 +41,7 @@ public class MainActivity extends Activity {
 		if(enteredPin == PIN){
 			
 			//checking if the user is logged on
-			if(ServiceFactory.getService().isUserLoggedIn()){
-				
+			if(!ServiceFactory.getService().isUserLoggedIn()){
 			Intent intent = new Intent(this, LogInActivity.class);
 			startActivity(intent);
 			
