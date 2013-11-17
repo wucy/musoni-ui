@@ -8,7 +8,7 @@ import android.database.Cursor;
 
 public class TaskReflector {
 	
-	public static final int CLIENT_REGISTER = 0, GROUP_REGISTER = 1;
+	public static final int CLIENT_REGISTER = 0, GROUP_REGISTER = 1, SEARCH_TASK=2;
 	
 	public static ITask reflect(Cursor cursor) {
 		int id = cursor.getInt(0);

@@ -29,7 +29,6 @@
             android:name="com.musoni.LogInActivity"
             android:label="@string/title_activity_log_in" >
         </activity>
-        <uses-library android:name="android.test.runner" />
         <activity
             android:name="com.musoni.ClientRegActivity"
             android:label="@string/title_activity_client_reg" >
@@ -42,8 +41,18 @@
             android:name="com.musoni.Welcome"
             android:label="@string/title_activity_welcome" >
         </activity>
+
+        <uses-library android:name="android.test.runner" />
+
+        <activity
+            android:name="com.musoni.QueueTaskActivity"
+            android:label="@string/title_activity_queue_task" >
+        </activity>
     </application>
-	<instrumentation android:name="android.test.InstrumentationTestRunner"
-    android:targetPackage="com.musoni"
-    android:label="AuthTest" />
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:label="AuthTest"
+        android:targetPackage="com.musoni" />
+
 </manifest>

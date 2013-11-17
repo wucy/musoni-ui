@@ -17,5 +17,6 @@
     <string name="title_activity_loan_application">LoanApplication</string>
     <string name="warningMessage">Username and password don\'t match. Try again.</string>
     <string name="title_activity_welcome">Welcome</string>
+    <string name="title_activity_queue_task">Queued Task</string>
 
 </resources>
